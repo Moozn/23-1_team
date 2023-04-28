@@ -17,4 +17,19 @@ public class PlayerAnim : MonoBehaviour
     {
        if(anim) anim.SetFloat("Move", move);
     }
+
+    public void Run(bool b)
+    {
+        if (anim) anim.SetBool("Run", b);
+    }
+
+    public void Desh()
+    {
+        if (anim) anim.SetTrigger("Desh");
+    }
+
+    public void Hit()
+    {
+        if (anim) anim.SetTrigger("Hit");
+    }
 }

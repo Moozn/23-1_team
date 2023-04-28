@@ -9,6 +9,7 @@ public enum State
     Idle, // 기본
     Attack, // 공격
     Hit, // 맞음
+    Desh, // 대쉬 회피기임
     Death // 죽음
 }
 public enum CalculationFormula
@@ -31,6 +32,7 @@ struct PlayerStat
 public class Player : MonoBehaviour
 {
     [SerializeField] SetUI swordCollider;
+    private State playerstate;
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -39,8 +41,8 @@ public class Player : MonoBehaviour
     private PlayerStat m_playerStat; //캐릭터 스텟
     private float Player_Hp; //체력
     private float Player_Mp; //마나
-   // private float Player_Vgr; //생명력
-    //private float Player_Mnt;//정신력
+                             // private float Player_Vgr; //생명력
+                             //private float Player_Mnt;//정신력
     private float Player_Atk; //공격력
     private float Player_Def; //방어력
     //private float Player_Str; //힘
@@ -70,6 +72,10 @@ public class Player : MonoBehaviour
         Stat_CalculationFormula(2);
         Stat_CalculationFormula(3);
     }
+    public void Add_Exp(float Exp)
+    {
+        Player_CurExp += Exp; //플레이어가 죽을때 몬스터에서 exp들고옴
+    }
     public void Add_Stat(int select)
     {
         switch (select)
@@ -97,7 +103,7 @@ public class Player : MonoBehaviour
                 Player_Hp = 80 + (m_playerStat.vgr * 5);
                 break;
             case 2:
-                Player_Atk = 100 + (m_playerStat .str * 11.5f);
+                Player_Atk = 100 + (m_playerStat.str * 11.5f);
                 break;
             case 3:
                 Player_Def = 10 + (m_playerStat.ind * 0.3f);
@@ -134,29 +140,37 @@ public class Player : MonoBehaviour
 
         Quaternion newRotate = Quaternion.LookRotation(rotate);
         rigid.rotation = Quaternion.Slerp(rigid.rotation, newRotate, 10 * Time.deltaTime); //현재 방향에서 목표방향으로 시간만큼 돌리기 그래서
-        
+
         //rigid.rotation *= Quaternion.Euler(0.0f, moveDirection.x * 0.5f, 0.0f); //회전
         //  rigid.rotation *= Quaternion.Euler(0.0f, rotate.x, 0.0f);
+    }
+    private void Hit(float Damage) // 회피할때 빼곤 맞음
+    {
+        if (playeranim && !playerstate.Equals(State.Desh))
+        {
+            Player_Hp -= Damage;
+            playeranim.Hit();
+        }
     }
     private void Movement()
     {
         if (rigid)
         {
-            int x = 1,z = 1;
+            int x = 1, z = 1;
             //애니메이션
             //transform.rotation = Quaternion.LookRotation(moveDirection); //회전
             //   transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * moveDirection.y); //이동
             Rotate();
-            if(moveDirection.x != 0) playeranim.Move(moveDirection.x);
+            if (moveDirection.x != 0) playeranim.Move(moveDirection.x);
             else playeranim.Move(moveDirection.z);
-        //    Debug.Log(transform.forward);
-           // Debug.Log(transform.right);
-           // if (transform.forward.z < 0) z = -1;
+            //    Debug.Log(transform.forward);
+            // Debug.Log(transform.right);
+            // if (transform.forward.z < 0) z = -1;
             //if (transform.right.x < 0) x = -1;
-            Vector3 velocity = new Vector3(0,0,z) * moveDirection.z * moveSpeed; //transform.forward * moveDirection.z * moveSpeed; //이동
+            Vector3 velocity = new Vector3(0, 0, z) * moveDirection.z * moveSpeed; //transform.forward * moveDirection.z * moveSpeed; //이동
             Vector3 velocity_x = new Vector3(x, 0, 0) * moveDirection.x * moveSpeed;//transform.right * moveDirection.x * moveSpeed;
             rigid.velocity = velocity + velocity_x; //이동
-            
+
         }
     }
     private void FixedUpdate()
@@ -172,16 +186,6 @@ public class Player : MonoBehaviour
             Stat_CalculationFormula(5);
         }
     }
-    private void OnDrawGizmosSelected()
-    {
-        Vector3 pos = transform.position;
-        pos.y = 0;
-        pos = pos + transform.forward * 3 +transform.up * 2;
-        Vector3 box = new Vector3(1, 0.5f, 0.5f);
-      //  Gizmos.DrawWireCube(pos, box * 2);
-        box = new Vector3(0.4f, 2, 0.4f);
-        Gizmos.DrawWireCube(pos, box * 2);
-    }
 
     IEnumerator SwordColliderMaintain() // 콜라이더 유지시간
     {
@@ -191,31 +195,15 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag.Equals("Monster")) other.GetComponent<Monster>().Hit(Player_Atk);
-    }
-    private void Attack()
+        if (other.tag.Equals("Monster")) other.GetComponent<Monster>().Hit(Player_Atk);
+    } //이건 검에 따로 달 예정 콜라이더
+    public void OnAttack()
     {
-        Collider[] targets = null;
-        Vector3 pos = transform.position;
-        pos.y = 0;
-        pos = pos + transform.forward * 3 + transform.up * 2;
-        Vector3 box = new Vector3(0.2f, 2f, 0.2f);
-        targets = Physics.OverlapBox(pos, box,transform.rotation);
-
-        if (null != targets && 0 < targets.Length)
-        {
-            foreach (var monster in targets)
-            {
-                monster.GetComponent<Monster>().Hit(Player_Atk);
-            }
-        }
-        Player_CurExp += Player_Atk;
-        if(Player_CurExp >= Player_NextExp)
-        {
-            Player_Lv += 1;
-            Player_CurExp = 0;
-            Stat_CalculationFormula(4);
-        }
+        swordCollider.On(); //애니메이션 이벤트에 넣었음
+    }
+    public void OffAttack()
+    {
+        swordCollider.Off();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -229,25 +217,33 @@ public class Player : MonoBehaviour
         if (mouse && playeranim)
         {
             playeranim.Attack();
-            StartCoroutine(SwordColliderMaintain());
-          //  Attack();
+            playerstate = State.Attack;
         }
     }
 
     public void OnRun(InputAction.CallbackContext context)
     {
         bool run = context.ReadValueAsButton();
-        if (run && playeranim) moveSpeed = 10f;
-        else moveSpeed = 4f;
+        if (playeranim)
+        {
+            playeranim.Run(run);
+            if(run) moveSpeed = 10f;
+            else moveSpeed = 4f;
+        }
     }
 
     public void OnDesh(InputAction.CallbackContext context)
     {
         bool desh = context.ReadValueAsButton();
-        if (desh && playeranim)
+        if(playeranim)
         {
-           
+            if (desh)
+            {
+                playeranim.Desh();
+                playerstate = State.Desh;
+            }
         }
+       
     }
 
 }
