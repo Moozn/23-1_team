@@ -9,6 +9,12 @@ public class PlayerAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();    
     }
+ //   private StateMachineExample _stateMachineExample;
+
+    void Start()
+    {
+        //_stateMachineExample = _animator.GetBehaviour<StateMachineExample>();
+    }
     public void Attack()
     {
         if (anim) anim.SetTrigger("Attack");
