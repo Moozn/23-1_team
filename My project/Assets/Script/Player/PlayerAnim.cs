@@ -29,9 +29,9 @@ public class PlayerAnim : MonoBehaviour
         if (anim) anim.SetBool("Run", b);
     }
 
-    public void Desh()
+    public void Dash()
     {
-        if (anim) anim.SetTrigger("Desh");
+        if (anim) anim.SetTrigger("Dash");
     }
 
     public void Hit()

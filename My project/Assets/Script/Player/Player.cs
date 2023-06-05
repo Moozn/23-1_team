@@ -9,7 +9,7 @@ public enum State
     Idle, // 기본
     Attack, // 공격
     Hit, // 맞음
-    Desh, // 대쉬 회피기임
+    Dash, // 대쉬 회피기임
     Death // 죽음
 }
 public enum CalculationFormula
@@ -30,9 +30,9 @@ struct PlayerStat
     public float NextExp; //필요 경험치
 }
 public class Player : MonoBehaviour
-{
+{ //소리 이펙트 넣기
     [SerializeField] SetUI swordCollider;
-    private State playerstate;
+    [SerializeField] private State playerstate;
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -144,9 +144,9 @@ public class Player : MonoBehaviour
         //rigid.rotation *= Quaternion.Euler(0.0f, moveDirection.x * 0.5f, 0.0f); //회전
         //  rigid.rotation *= Quaternion.Euler(0.0f, rotate.x, 0.0f);
     }
-    private void Hit(float Damage) // 회피할때 빼곤 맞음
+    public void OnHit(float Damage) // 회피할때 빼곤 맞음
     {
-        if (playeranim && !playerstate.Equals(State.Desh))
+        if (playeranim && !playerstate.Equals(State.Dash))
         {
             Player_Hp -= Damage;
             playeranim.Hit();
@@ -172,6 +172,10 @@ public class Player : MonoBehaviour
             rigid.velocity = velocity + velocity_x; //이동
 
         }
+    }
+    public void StateChange(State state)
+    {
+        playerstate = state;
     }
     private void FixedUpdate()
     {
@@ -217,7 +221,7 @@ public class Player : MonoBehaviour
         if (mouse && playeranim)
         {
             playeranim.Attack();
-            playerstate = State.Attack;
+        //    playerstate = State.Attack;
         }
     }
 
@@ -239,8 +243,8 @@ public class Player : MonoBehaviour
         {
             if (desh)
             {
-                playeranim.Desh();
-                playerstate = State.Desh;
+                playeranim.Dash();
+              //  playerstate = State.Desh;
             }
         }
        
