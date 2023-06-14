@@ -63,7 +63,7 @@ public class Skilㅣ : MonoBehaviour
 
     public void SkilCheck(LayerMask target)
     {
-        if (!skill && Input.GetKeyDown(skill_key))
+        if (!skill && Input.GetKeyDown(skill_key)) //키 누르면 발동되는 식으로
         {
             skill = true;
             StartCoroutine(EffectPlay());
