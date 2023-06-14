@@ -42,9 +42,9 @@ public class Monster : MonoBehaviour
         delay = true;
         min = 0;
         max = 0;
-        dis_Pattern1 = 100f;
-        dis_Pattern2 = 20f;
-        dis_Pattern3 = 10f;
+        dis_Pattern1 = 30f;
+        dis_Pattern2 = 10f;
+        dis_Pattern3 = 5f;
     }
     private void Awake()
     {
