@@ -47,6 +47,7 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         Init();
+       // StartCoroutine(Look());
         StartCoroutine(Think());
     }
     private void OnEnable()
@@ -93,6 +94,7 @@ public class Monster : MonoBehaviour
         player.Add_Exp(Mob_Exp);
     }
     private void Lookat()
+<<<<<<< Updated upstream
     {   
         if(!state.Equals(MonstrState.Dash))
         {
@@ -101,6 +103,16 @@ public class Monster : MonoBehaviour
             transform.rotation = Quaternion.Slerp (transform.rotation, newRotate, 2 * Time.deltaTime);
         }
     }  
+=======
+    {
+        // Vector3 rotate = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - (transform.position);
+        // Quaternion newRotate = Quaternion.LookRotation(rotate);
+        // rigid.rotation = Quaternion.Slerp(rigid.rotation, newRotate, 10 * Time.fixedDeltaTime);
+        Vector3 direction = player.transform.position - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+    }
+>>>>>>> Stashed changes
     private void Exploration() //Å½»ö
     {
         float dis = distance();
@@ -127,11 +139,22 @@ public class Monster : MonoBehaviour
     }
     IEnumerator Think()
     {
+<<<<<<< Updated upstream
         yield return new WaitForSeconds(0.1f);
 
         int ranpattern = Random.Range(min, max);
         Debug.Log(ranpattern);
         yield return new WaitForSeconds(0.5f);
+=======
+            yield return new WaitForSeconds(0.1f);
+
+            int ranpattern = Random.Range(min, max);
+            Debug.Log(ranpattern);
+
+        Lookat();
+        yield return new WaitForSeconds(1f);
+
+>>>>>>> Stashed changes
         switch (ranpattern)
             {
                 case 0:
@@ -162,10 +185,16 @@ public class Monster : MonoBehaviour
     }
     private void FixedUpdate()
     {
+<<<<<<< Updated upstream
         if (state.Equals(MonstrState.Dash))
         {
             rigid.AddForce(transform.forward * 500);
         }
+=======
+       // Lookat();
+      //  Fire();
+        if (state.Equals(MonstrState.Dash)) rigid.AddForce(transform.forward * 5, ForceMode.Impulse);
+>>>>>>> Stashed changes
         if (state.Equals(MonstrState.Run)) Move();
         else StartCoroutine(MoveStop());
     }
@@ -173,12 +202,23 @@ public class Monster : MonoBehaviour
     {
         anim.SetTrigger("Attack2");
     }
+   
+    private System.Collections.IEnumerator Look()
+    {
+        while (true)
+        {
+            Lookat();
+            yield return null;
+        }
+    }
     IEnumerator Attack()
     {
+        
         state = MonstrState.Attack;
         anim.SetTrigger("Attack");
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(Think());
+
     }
     IEnumerator Rush()
     {
@@ -207,7 +247,7 @@ public class Monster : MonoBehaviour
     {
         anim.SetTrigger("JumpAttack");
         state = MonstrState.Attack;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         state = MonstrState.Idle;
         StartCoroutine(Think());
     }
