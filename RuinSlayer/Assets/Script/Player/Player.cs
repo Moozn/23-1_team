@@ -144,6 +144,10 @@ public class Player : MonoBehaviour
         //rigid.rotation *= Quaternion.Euler(0.0f, moveDirection.x * 0.5f, 0.0f); //È¸Àü
         //  rigid.rotation *= Quaternion.Euler(0.0f, rotate.x, 0.0f);
     }
+    public void recovery(float hill)
+    {
+        Player_Hp += hill;
+    }
     public void OnHit(float Damage) // È¸ÇÇÇÒ¶§ »©°ï ¸ÂÀ½
     {
         if (playeranim && !playerstate.Equals(State.Dash))
@@ -249,5 +253,7 @@ public class Player : MonoBehaviour
         }
        
     }
+
+
 
 }

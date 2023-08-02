@@ -27,7 +27,7 @@ public class Monster : MonoBehaviour
     private float player_dis;
     [SerializeField] private GameObject bullet;
     private bool delay;
-    private int min,max;
+    private int min, max;
     private void Init()
     {
         Mob_HpMax = 10000f;
@@ -35,7 +35,7 @@ public class Monster : MonoBehaviour
         Mob_Exp = 0;
         state = MonstrState.Idle;
         anim = GetComponent<Animator>();
-     //  rigid = GetComponent<Rigidbody>();
+        //  rigid = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         delay = true;
         min = 0;
@@ -61,13 +61,13 @@ public class Monster : MonoBehaviour
     {
         float angle = 45;
         int bulletnum = 10;
-        float angleIncrement = angle / (bulletnum - 1);  
+        float angleIncrement = angle / (bulletnum - 1);
 
         for (int i = 0; i < bulletnum; i++)
         {
-          float currentAngle = -angle / 2f + i * angleIncrement;
-          GameObject _bullet = Instantiate(bullet, transform.position, Quaternion.identity);
-          _bullet.transform.forward = Quaternion.Euler(0f, currentAngle, 0f) * transform.forward;
+            float currentAngle = -angle / 2f + i * angleIncrement;
+            GameObject _bullet = Instantiate(bullet, transform.position, Quaternion.identity);
+            _bullet.transform.forward = Quaternion.Euler(0f, currentAngle, 0f) * transform.forward;
         }
     }
     public void Hit(float Damage)
@@ -93,19 +93,19 @@ public class Monster : MonoBehaviour
         player.Add_Exp(Mob_Exp);
     }
     private void Lookat()
-    {   
-        if(!state.Equals(MonstrState.Dash))
+    {
+        if (!state.Equals(MonstrState.Dash))
         {
             Vector3 rotate = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position;
             Quaternion newRotate = Quaternion.LookRotation(rotate);
-            transform.rotation = Quaternion.Slerp (transform.rotation, newRotate, 2 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotate, 2 * Time.deltaTime);
         }
-    }  
+    }
     private void Exploration() //Å½»ö
     {
         float dis = distance();
 
-     if(dis <= dis_Pattern1 && delay)
+        if (dis <= dis_Pattern1 && delay)
         {
             min = 0;
             max = 1;
@@ -122,7 +122,7 @@ public class Monster : MonoBehaviour
                     max = 3;
                 }
             }
-            else  state = MonstrState.Run;
+            else state = MonstrState.Run;
         }
     }
     IEnumerator Think()
@@ -133,23 +133,23 @@ public class Monster : MonoBehaviour
         Debug.Log(ranpattern);
         yield return new WaitForSeconds(0.5f);
         switch (ranpattern)
-            {
-                case 0:
-                     StartCoroutine(Delay());
-                    break;
-                case 1:
+        {
+            case 0:
+                StartCoroutine(Delay());
+                break;
+            case 1:
                 StartCoroutine(Rush());
-                    break;
-                case 2:
-                    StartCoroutine(Breth());
-                    break;
-                case 3:
-                    StartCoroutine(Attack());
-                    break;
-                case 4:
-                    StartCoroutine(JumpAttack());
-                    break;
-            }
+                break;
+            case 2:
+                StartCoroutine(Breth());
+                break;
+            case 3:
+                StartCoroutine(Attack());
+                break;
+            case 4:
+                StartCoroutine(JumpAttack());
+                break;
+        }
     }
     private float distance()
     {
@@ -182,7 +182,7 @@ public class Monster : MonoBehaviour
     }
     IEnumerator Rush()
     {
-       
+
         anim.SetBool("Dash", true);
         agent.isStopped = false;
         state = MonstrState.Dash;
@@ -217,7 +217,7 @@ public class Monster : MonoBehaviour
         state = MonstrState.Breth;
         yield return new WaitForSeconds(1f);
         state = MonstrState.Idle;
-         StartCoroutine(Think());
+        StartCoroutine(Think());
     }
     public void Activation()
     {
