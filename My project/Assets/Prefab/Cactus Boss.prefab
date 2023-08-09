@@ -88,9 +88,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   player: {fileID: 0}
+  rigid: {fileID: 0}
+  head_horn: {fileID: 0}
+  hand: {fileID: 0}
   bullet: {fileID: 5068719902795929991, guid: 849c778f7f4ec644598e7a1e527ff3b6, type: 3}
-  bulletpos: {fileID: 3984609039562112526}
-  bulletpos2: {fileID: 3984609038749924761}
 --- !u!195 &3984609039359898504
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -884,7 +885,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4182914414703700173}
-  - component: {fileID: 3984609039125805850}
   m_Layer: 0
   m_Name: RigHead
   m_TagString: Untagged
@@ -911,19 +911,6 @@ Transform:
   m_Father: {fileID: 8874645136308857243}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3984609039125805850
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4035464271672610469}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 2.5}
-  m_Center: {x: -0.5, y: 0, z: 0}
 --- !u!1 &4277676070726087719
 GameObject:
   m_ObjectHideFlags: 0

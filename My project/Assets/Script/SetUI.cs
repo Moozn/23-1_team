@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SetUI : MonoBehaviour
 {
+    private void Awake()
+    {
+        Off();
+    }
     public void On()
     {
         gameObject.SetActive(true);

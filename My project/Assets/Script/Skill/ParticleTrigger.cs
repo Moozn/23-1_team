@@ -18,7 +18,6 @@ public class ParticleTrigger : MonoBehaviour
     {
         if (other.tag == "Monster")
         {
-            Debug.Log($"Effect Collision : {other.name}");
             other.GetComponent<Monster>().Hit(damage);      
         }
     }

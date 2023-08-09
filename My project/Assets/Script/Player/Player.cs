@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     [SerializeField] SetUI swordCollider;
     [SerializeField] SetUI swordEffect;
     [SerializeField] private State playerstate;
+    [SerializeField] private weapon sword; // 검콜라이더
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -51,6 +52,7 @@ public class Player : MonoBehaviour
     private float Player_CurExp; //현재 경험치
     private float Player_NextExp; // 필요경험치
     private int Player_Lv; //레벨
+    private float max_Hp;
     private float MpRecoverytime; //마나회복 시간 ex)1초마다
 
     public void Initialize()
@@ -103,9 +105,11 @@ public class Player : MonoBehaviour
         {
             case 1:
                 Player_Hp = 80 + (m_playerStat.vgr * 5);
+                max_Hp = Player_Hp;
                 break;
             case 2:
                 Player_Atk = 100 + (m_playerStat.str * 11.5f);
+                sword.Set_Damage(Player_Atk);
                 break;
             case 3:
                 Player_Def = 10 + (m_playerStat.ind * 0.3f);
@@ -146,16 +150,29 @@ public class Player : MonoBehaviour
         //rigid.rotation *= Quaternion.Euler(0.0f, moveDirection.x * 0.5f, 0.0f); //회전
         //  rigid.rotation *= Quaternion.Euler(0.0f, rotate.x, 0.0f);
     }
+    public bool Mp_Consume(float skill_mp)
+    {
+        if (Player_Mp - skill_mp < 0) return false;
+        else
+        {
+            Player_Mp -= skill_mp;
+            return true;
+        }
+
+    }
     public void recovery(float hill)
     {
-        Player_Hp += hill;
+        if (Player_Hp + hill <= max_Hp)  Player_Hp += hill; //힐 했을때 더한 값이 최대체력보다 낮을떄만 하고 높으면 그냥 최대체력을 줘버리기
+        else Player_Hp = max_Hp;
     }
-    public void OnHit(float Damage) // 회피할때 빼곤 맞음
+    public void Hit(float Damage) // 회피할때 빼곤 맞음
     {
         if (playeranim && !playerstate.Equals(State.Dash))
         {
             Player_Hp -= Damage;
             playeranim.Hit();
+            playerstate = State.Hit;
+            Debug.Log("맞음" + Player_Hp);
         }
     }
     private void Movement()
@@ -205,7 +222,7 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Monster")) other.GetComponent<Monster>().Hit(Player_Atk);
+        //if (other.tag.Equals("Monster")) other.GetComponent<Monster>().Hit(Player_Atk);
     } //이건 검에 따로 달 예정 콜라이더
     public void OnAttack()
     {

@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player") other.GetComponent<Player>().OnHit(dmage);
+        if (other.tag == "Player") other.GetComponent<Player>().Hit(dmage);
 
         //if (other.tag != "Monster") Destroy(gameObject);
     }

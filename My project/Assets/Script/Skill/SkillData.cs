@@ -10,4 +10,6 @@ public class SkillData : ScriptableObject
     public float Effect_playtime { get { return effect_playtime; } }
     [SerializeField] SkillType type;
     public SkillType Type { get { return type; } }
+    public float Cost { get { return cost; } }
+    [SerializeField] float cost;
 }

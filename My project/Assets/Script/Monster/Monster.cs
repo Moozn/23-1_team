@@ -23,12 +23,17 @@ public class Monster : MonoBehaviour
     [SerializeField] private MonstrState state;
     [SerializeField] private Player player;
     [SerializeField] private Rigidbody rigid;
+    [SerializeField] private weapon r_hand; // 기본공격
+    [SerializeField] private weapon l_hand; // 기본공격
+    [SerializeField] private SetUI r_handCoillder; // 기본공격
+    [SerializeField] private SetUI l_handCoillder; // 기본공격
     private NavMeshAgent agent;
     private float dis_Pattern1, dis_Pattern2, dis_Pattern3; //패턴거리
     private float player_dis;
     [SerializeField] private GameObject bullet;
     private bool delay;
     private int min, max;
+    private bool dash_; //흠.. 변수이르  ㅁ 뭘로하지 일단 이건 콜라이더가 머리에도 몸에도 있어서 2번씩 닿기떄문에 그냥 한번 닿으면 false해주고 다시 true로 한번만 닿게 할꺼임
     private void Init()
     {
         Mob_HpMax = 10000f;
@@ -45,6 +50,9 @@ public class Monster : MonoBehaviour
         dis_Pattern2 = 10f;
         dis_Pattern3 = 5f;
         stemina = 100f;
+        r_hand.Set_Damage(10);
+        l_hand.Set_Damage(10);
+        dash_ = true;
     }
     private void Awake()
     {
@@ -72,10 +80,18 @@ public class Monster : MonoBehaviour
             _bullet.transform.forward = Quaternion.Euler(0f, currentAngle, 0f) * transform.forward;
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(state.Equals(MonstrState.Dash) && dash_)
+        {
+            dash_ = false;
+            player.Hit(30f);
+        }
+    }
     public void Hit(float Damage)
     {
         Mob_Hp -= Damage;
-        Debug.Log("현재 체력 : " + Mob_HpMax);
+        Debug.Log("현재 체력 : " + Mob_Hp);
     }
     private void Move()
     {
@@ -137,6 +153,8 @@ public class Monster : MonoBehaviour
         if (stemina >= 30)
         {
             stemina -= 20;
+
+            StartCoroutine(Rush());
             switch (ranpattern)
             {
                 case 0:
@@ -184,7 +202,11 @@ public class Monster : MonoBehaviour
     {
         state = MonstrState.Attack;
         anim.SetTrigger("Attack");
+        r_handCoillder.On();
+        l_handCoillder.On();
         yield return new WaitForSeconds(0.5f);
+        r_handCoillder.Off();
+        l_handCoillder.Off();
         StartCoroutine(Think());
     }
     IEnumerator Rush()
@@ -193,6 +215,7 @@ public class Monster : MonoBehaviour
         anim.SetBool("Dash", true);
         agent.isStopped = false;
         state = MonstrState.Dash;
+        dash_ = true;
         yield return new WaitForSeconds(1f);
         state = MonstrState.Idle;
         anim.SetBool("Dash", false);
@@ -220,8 +243,10 @@ public class Monster : MonoBehaviour
     {
         anim.SetTrigger("JumpAttack");
         state = MonstrState.Attack;
+        r_handCoillder.On();
         yield return new WaitForSeconds(0.5f);
         state = MonstrState.Idle;
+        r_handCoillder.Off();
         StartCoroutine(Think());
     }
     IEnumerator Breth()

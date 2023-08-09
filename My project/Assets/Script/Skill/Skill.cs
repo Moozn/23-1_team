@@ -69,7 +69,7 @@ public class Skill : MonoBehaviour
 
     private void Long_skill() //원거리 스킬 마우스 포인터에 나타남
     {
-        if (pt) pt.SetDamage(10f);
+        if (pt) pt.SetDamage(100f);
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());//Input.mousePosition);
         RaycastHit hit;
 
@@ -119,7 +119,7 @@ public class Skill : MonoBehaviour
     }
     public void Press_Skill()
     {
-        if (curTime <= 0)
+        if (curTime <= 0 && player.Mp_Consume(data.Cost)) //스킬 코스트 스킬마다 지정해서 그거 소모
         {
             skill_type();
             StartCoroutine(EffectPlay());
