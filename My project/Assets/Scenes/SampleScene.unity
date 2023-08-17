@@ -204,7 +204,6 @@ GameObject:
   m_Component:
   - component: {fileID: 81088488}
   - component: {fileID: 81088489}
-  - component: {fileID: 81088490}
   - component: {fileID: 81088491}
   m_Layer: 5
   m_Name: Player_Mp
@@ -287,18 +286,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &81088490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 81088487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &81088491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2437,7 +2424,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1034105010}
   - component: {fileID: 1034105011}
-  - component: {fileID: 1034105012}
   - component: {fileID: 1034105013}
   m_Layer: 5
   m_Name: Player_Hp
@@ -2520,18 +2506,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1034105012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1034105009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1034105013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3426,7 +3400,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1990182512}
   - component: {fileID: 1990182513}
-  - component: {fileID: 1990182514}
   - component: {fileID: 1990182515}
   m_Layer: 5
   m_Name: Boss_Hp
@@ -3509,18 +3482,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1990182514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1990182511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1990182515
 MonoBehaviour:
   m_ObjectHideFlags: 0
