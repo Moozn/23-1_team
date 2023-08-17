@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 81088488}
   - component: {fileID: 81088489}
   - component: {fileID: 81088490}
+  - component: {fileID: 81088491}
   m_Layer: 5
   m_Name: Player_Mp
   m_TagString: Untagged
@@ -296,6 +297,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &81088491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 81088487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e5b170b812f104887765312ddd68da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &98148609
@@ -579,6 +592,8 @@ MonoBehaviour:
   swordEffect: {fileID: 0}
   playerstate: 0
   sword: {fileID: 0}
+  hp_slider: {fileID: 0}
+  mp_slider: {fileID: 0}
 --- !u!1 &250720077
 GameObject:
   m_ObjectHideFlags: 0
@@ -1998,6 +2013,8 @@ MonoBehaviour:
   swordEffect: {fileID: 0}
   playerstate: 0
   sword: {fileID: 0}
+  hp_slider: {fileID: 0}
+  mp_slider: {fileID: 0}
 --- !u!4 &955812041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 25f76e473f551e64a8438e7c32a0ec8e, type: 3}
@@ -2421,6 +2438,7 @@ GameObject:
   - component: {fileID: 1034105010}
   - component: {fileID: 1034105011}
   - component: {fileID: 1034105012}
+  - component: {fileID: 1034105013}
   m_Layer: 5
   m_Name: Player_Hp
   m_TagString: Untagged
@@ -2512,6 +2530,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1034105013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034105009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e5b170b812f104887765312ddd68da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1042553337
@@ -3397,6 +3427,7 @@ GameObject:
   - component: {fileID: 1990182512}
   - component: {fileID: 1990182513}
   - component: {fileID: 1990182514}
+  - component: {fileID: 1990182515}
   m_Layer: 5
   m_Name: Boss_Hp
   m_TagString: Untagged
@@ -3488,6 +3519,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1990182515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990182511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e5b170b812f104887765312ddd68da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2012220112
@@ -3846,6 +3889,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 572992865}
     - target: {fileID: 3984609039359898508, guid: 9a653cb3313427c4591e6b186344e838, type: 3}
+      propertyPath: hpsilder
+      value: 
+      objectReference: {fileID: 1990182515}
+    - target: {fileID: 3984609039359898508, guid: 9a653cb3313427c4591e6b186344e838, type: 3}
       propertyPath: head_horn
       value: 
       objectReference: {fileID: 0}
@@ -4102,6 +4149,14 @@ PrefabInstance:
       propertyPath: sword
       value: 
       objectReference: {fileID: 2128150976}
+    - target: {fileID: 8541849476853426566, guid: 276ba8c3a893d89449f9c9ae827885f2, type: 3}
+      propertyPath: hp_slider
+      value: 
+      objectReference: {fileID: 1034105013}
+    - target: {fileID: 8541849476853426566, guid: 276ba8c3a893d89449f9c9ae827885f2, type: 3}
+      propertyPath: mp_slider
+      value: 
+      objectReference: {fileID: 81088491}
     - target: {fileID: 8541849476853426566, guid: 276ba8c3a893d89449f9c9ae827885f2, type: 3}
       propertyPath: swordEffect
       value: 
