@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     [SerializeField] SetUI swordEffect;
     [SerializeField] private State playerstate;
     [SerializeField] private weapon sword; // 검콜라이더
+    [SerializeField] private SliderScript hp_slider;
+    [SerializeField] private SliderScript mp_slider;
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -53,6 +55,7 @@ public class Player : MonoBehaviour
     private float Player_NextExp; // 필요경험치
     private int Player_Lv; //레벨
     private float max_Hp;
+    private float max_mp;
     private float MpRecoverytime; //마나회복 시간 ex)1초마다
 
     public void Initialize()
@@ -71,6 +74,7 @@ public class Player : MonoBehaviour
         Player_CurExp = 0;
         //Player_NextExp = 100f;
         Player_Mp = 50;
+        max_mp = Player_Mp;
         MpRecoverytime = 0f;
         Stat_CalculationFormula(1);
         Stat_CalculationFormula(2);
@@ -206,6 +210,8 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
+        hp_slider.Slider_Update(Player_Hp / max_Hp);
+        mp_slider.Slider_Update(Player_Mp / max_mp);
         MpRecoverytime += Time.deltaTime;
         if (MpRecoverytime >= 1f)//1초마다 마나회복
         {

@@ -27,6 +27,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private weapon l_hand; // 기본공격
     [SerializeField] private SetUI r_handCoillder; // 기본공격
     [SerializeField] private SetUI l_handCoillder; // 기본공격
+    [SerializeField] private SliderScript hpsilder;
     private NavMeshAgent agent;
     private float dis_Pattern1, dis_Pattern2, dis_Pattern3; //패턴거리
     private float player_dis;
@@ -34,6 +35,7 @@ public class Monster : MonoBehaviour
     private bool delay;
     private int min, max;
     private bool dash_; //흠.. 변수이르  ㅁ 뭘로하지 일단 이건 콜라이더가 머리에도 몸에도 있어서 2번씩 닿기떄문에 그냥 한번 닿으면 false해주고 다시 true로 한번만 닿게 할꺼임
+    private float stiffen; //경직
     private void Init()
     {
         Mob_HpMax = 10000f;
@@ -53,6 +55,7 @@ public class Monster : MonoBehaviour
         r_hand.Set_Damage(10);
         l_hand.Set_Damage(10);
         dash_ = true;
+        stiffen = 100f;
     }
     private void Awake()
     {
@@ -91,6 +94,7 @@ public class Monster : MonoBehaviour
     public void Hit(float Damage)
     {
         Mob_Hp -= Damage;
+        stiffen -= 5f;
         Debug.Log("현재 체력 : " + Mob_Hp);
     }
     private void Move()
@@ -150,7 +154,12 @@ public class Monster : MonoBehaviour
         int ranpattern = Random.Range(min, max);
         Debug.Log(ranpattern);
         yield return new WaitForSeconds(0.5f);
-        if (stemina >= 30)
+        if(stiffen <= 0)
+        {
+            StartCoroutine(Stern());
+            stiffen = 100f;
+        }
+        else if (stemina >= 30)
         {
             stemina -= 20;
 
@@ -182,6 +191,7 @@ public class Monster : MonoBehaviour
     }
     private void Update()
     {
+        hpsilder.Slider_Update(Mob_Hp / Mob_HpMax);
         if (stemina >= 30) Exploration();
         Lookat();
     }
@@ -197,6 +207,14 @@ public class Monster : MonoBehaviour
     public void Attack2()
     {
         anim.SetTrigger("Attack2");
+    }
+    IEnumerator Stern()
+    {
+        state = MonstrState.Hit;
+      //  anim.SetTrigger("Attack");
+        yield return new WaitForSeconds(3f);
+        state = MonstrState.Idle;
+        StartCoroutine(Think());
     }
     IEnumerator Attack()
     {
