@@ -21,7 +21,7 @@ public enum CalculationFormula
     Mp_Natural, //자연회복
     Mp_Attack //떄리면회복
 }
-struct PlayerStat
+public struct PlayerStat
 {
     public float vgr; //생명력
     public float str; //힘
@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     [SerializeField] private weapon sword; // 검콜라이더
     [SerializeField] private SliderScript hp_slider;
     [SerializeField] private SliderScript mp_slider;
+    [SerializeField] private TextUi text;
+    [SerializeField] private SetUI infoUi;
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -57,7 +59,7 @@ public class Player : MonoBehaviour
     private float max_Hp;
     private float max_mp;
     private float MpRecoverytime; //마나회복 시간 ex)1초마다
-
+    private bool isDead => (0 >= Player_Hp); // 죽음 상태 확인
     public void Initialize()
     {
         moveSpeed = 4f;
@@ -86,7 +88,7 @@ public class Player : MonoBehaviour
     }
     public void Add_Stat(int select)
     {
-        switch (select)
+        switch (select) //경험치로 사게 만들기
         {
             case 1:
                 m_playerStat.vgr++;
@@ -101,6 +103,7 @@ public class Player : MonoBehaviour
                 m_playerStat.mnt++;
                 break;
         }
+        Stat_CalculationFormula(select);
     }
     public void Stat_CalculationFormula(int select) //계산식
     {
@@ -171,7 +174,7 @@ public class Player : MonoBehaviour
     }
     public void Hit(float Damage) // 회피할때 빼곤 맞음
     {
-        if (playeranim && !playerstate.Equals(State.Dash))
+        if (playeranim && !playerstate.Equals(State.Dash) && !isDead)
         {
             Player_Hp -= Damage;
             playeranim.Hit();
@@ -200,6 +203,12 @@ public class Player : MonoBehaviour
 
         }
     }
+    private IEnumerator Die() //정지시키고 뭐 해야할듯
+    {
+        yield return new WaitForSeconds(1.33f);
+       // gameObject.SetActive(false);
+        infoUi.On();
+    }
     public void StateChange(State state)
     {
         playerstate = state;
@@ -212,11 +221,16 @@ public class Player : MonoBehaviour
     {
         hp_slider.Slider_Update(Player_Hp / max_Hp);
         mp_slider.Slider_Update(Player_Mp / max_mp);
+        text.statText(Player_Lv, Player_CurExp, m_playerStat);
         MpRecoverytime += Time.deltaTime;
         if (MpRecoverytime >= 1f)//1초마다 마나회복
         {
             MpRecoverytime = 0f;
             Stat_CalculationFormula(5);
+        }
+        if (isDead)
+        {
+            StartCoroutine(Die());
         }
     }
 
