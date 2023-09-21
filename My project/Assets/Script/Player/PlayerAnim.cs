@@ -34,8 +34,13 @@ public class PlayerAnim : MonoBehaviour
         if (anim) anim.SetTrigger("Dash");
     }
 
+
     public void Hit()
     {
         if (anim) anim.SetTrigger("Hit");
+    }
+    public void Die(bool b)
+    {
+        if (anim) anim.SetBool("Die",b);
     }
 }

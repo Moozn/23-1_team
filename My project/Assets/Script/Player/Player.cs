@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SliderScript mp_slider;
     [SerializeField] private TextUi text;
     [SerializeField] private SetUI infoUi;
+    [SerializeField] private Monster monster;
     private PlayerAnim playeranim;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -73,7 +74,7 @@ public class Player : MonoBehaviour
         // Player_Ind = 5;
         // Player_Mnt = 5;
         // Player_Vgr = 5;
-        Player_CurExp = 0;
+        Player_CurExp = 0;  
         //Player_NextExp = 100f;
         Player_Mp = 50;
         max_mp = Player_Mp;
@@ -176,10 +177,10 @@ public class Player : MonoBehaviour
     {
         if (playeranim && !playerstate.Equals(State.Dash) && !isDead)
         {
-            Player_Hp -= Damage;
-            playeranim.Hit();
-            playerstate = State.Hit;
-            Debug.Log("맞음" + Player_Hp);
+                Player_Hp -= Damage;
+                playeranim.Hit();
+                playerstate = State.Hit;
+                Debug.Log("맞음" + Player_Hp);
         }
     }
     private void Movement()
@@ -200,14 +201,24 @@ public class Player : MonoBehaviour
             Vector3 velocity = new Vector3(0, 0, z) * moveDirection.z * moveSpeed; //transform.forward * moveDirection.z * moveSpeed; //이동
             Vector3 velocity_x = new Vector3(x, 0, 0) * moveDirection.x * moveSpeed;//transform.right * moveDirection.x * moveSpeed;
             rigid.velocity = velocity + velocity_x; //이동
-
         }
     }
     private IEnumerator Die() //정지시키고 뭐 해야할듯
     {
-        yield return new WaitForSeconds(1.33f);
-       // gameObject.SetActive(false);
+        // if(playerstate.Equals(State.Death)) playeranim.Die();
+        playerstate = State.Death;
+        playeranim.Die(true);
+        yield return new WaitForSeconds(1f);
+        playeranim.Die(true);
+        //   gameObject.SetActive(false);
+        MaxHPMP();
+        monster.Deactivation();
         infoUi.On();
+    }
+    private void MaxHPMP()
+    {
+        Player_Hp = max_Hp;
+        Player_Mp = max_mp;
     }
     public void StateChange(State state)
     {
@@ -215,7 +226,7 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        Movement();
+        if(!playerstate.Equals(State.Death))Movement();
     }
     private void Update()
     {

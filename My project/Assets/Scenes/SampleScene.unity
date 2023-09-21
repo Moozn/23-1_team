@@ -846,6 +846,7 @@ MonoBehaviour:
   mp_slider: {fileID: 0}
   text: {fileID: 0}
   infoUi: {fileID: 0}
+  monster: {fileID: 0}
 --- !u!1 &250720077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2764,6 +2765,7 @@ MonoBehaviour:
   mp_slider: {fileID: 0}
   text: {fileID: 0}
   infoUi: {fileID: 0}
+  monster: {fileID: 0}
 --- !u!4 &955812041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 25f76e473f551e64a8438e7c32a0ec8e, type: 3}
@@ -5629,6 +5631,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a653cb3313427c4591e6b186344e838, type: 3}
+--- !u!114 &3984609038950270453 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3984609039359898508, guid: 9a653cb3313427c4591e6b186344e838, type: 3}
+  m_PrefabInstance: {fileID: 3984609038950270452}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949104634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48787b7e04ee97b429e8203d4d712f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8541849477785092307
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5860,6 +5873,10 @@ PrefabInstance:
       propertyPath: infoUi
       value: 
       objectReference: {fileID: 93988130}
+    - target: {fileID: 8541849476853426566, guid: 276ba8c3a893d89449f9c9ae827885f2, type: 3}
+      propertyPath: monster
+      value: 
+      objectReference: {fileID: 3984609038950270453}
     - target: {fileID: 8541849476853426566, guid: 276ba8c3a893d89449f9c9ae827885f2, type: 3}
       propertyPath: hp_slider
       value: 

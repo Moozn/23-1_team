@@ -119,7 +119,9 @@ public class Monster : MonoBehaviour
         if (!state.Equals(MonstrState.Dash))
         {
             Vector3 rotate = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z) - transform.position;
-            Quaternion newRotate = Quaternion.LookRotation(rotate);
+       //     if (rotate.x == 0 && rotate.y == 0 && rotate.z == 0) rotate = transform.forward;
+            Quaternion newRotate = Quaternion.LookRotation(rotate.normalized);
+            Debug.Log(rotate.normalized);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotate, 2 * Time.deltaTime);
         }
     }
