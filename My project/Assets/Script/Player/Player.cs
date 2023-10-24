@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
 { //소리 이펙트 넣기
     [SerializeField] SetUI swordCollider;
     [SerializeField] SetUI swordEffect;
+    [SerializeField] ParticleSystem[] ps = new ParticleSystem[3];
     [SerializeField] private State playerstate;
     [SerializeField] private weapon sword; // 검콜라이더
     [SerializeField] private SliderScript hp_slider;
@@ -40,7 +41,11 @@ public class Player : MonoBehaviour
     [SerializeField] private TextUi text;
     [SerializeField] private SetUI infoUi;
     [SerializeField] private Monster monster;
-    private PlayerAnim playeranim;
+    [SerializeField] private PlayerAnim playeranim;
+    [SerializeField] private AudioSource hitAudio;
+    [SerializeField] private AudioSource dieAudio;
+    [SerializeField] private AudioSource swordAudio;
+    [SerializeField] private Transform camera;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
     private Rigidbody rigid;
@@ -89,22 +94,28 @@ public class Player : MonoBehaviour
     }
     public void Add_Stat(int select)
     {
-        switch (select) //경험치로 사게 만들기
+        if (Player_CurExp - m_playerStat.NextExp >= 0) //현재 경험치가 필요보다 클경우만 스텟을 올림
         {
-            case 1:
-                m_playerStat.vgr++;
-                break;
-            case 2:
-                m_playerStat.str++;
-                break;
-            case 3:
-                m_playerStat.ind++;
-                break;
-            case 4:
-                m_playerStat.mnt++;
-                break;
+            Player_Lv++;
+            Player_CurExp -= m_playerStat.NextExp;
+            switch (select) //경험치로 사게 만들기
+            {
+                case 1:
+                    m_playerStat.vgr++;
+                    break;
+                case 2:
+                    m_playerStat.str++;
+                    break;
+                case 3:
+                    m_playerStat.ind++;
+                    break;
+                case 4:
+                    m_playerStat.mnt++;
+                    break;
+            }
+            Stat_CalculationFormula(select);
+            Stat_CalculationFormula(6);
         }
-        Stat_CalculationFormula(select);
     }
     public void Stat_CalculationFormula(int select) //계산식
     {
@@ -123,14 +134,16 @@ public class Player : MonoBehaviour
                 Player_Def = 10 + (m_playerStat.ind * 0.3f);
                 break;
             case 4:
-                m_playerStat.NextExp = 100 + (m_playerStat.NextExp * 0.3f);
+                Player_Mp += 10 + m_playerStat.mnt * 0.5f;
                 break;
             case 5:
                 // 이부분에 Mp 총량을 넘을수 없다 if로 넣을 예정
-                Player_Mp += m_playerStat.mnt * 0.5f;
+                if (Player_Mp + m_playerStat.mnt * 0.5f <= max_mp)
+                    Player_Mp += m_playerStat.mnt * 0.5f;
+                else Player_Mp = max_mp;
                 break;
             case 6:
-                Player_Mp += 10 + m_playerStat.mnt * 0.5f;
+                m_playerStat.NextExp += (m_playerStat.NextExp * 0.3f);
                 break;
         }
     }
@@ -143,17 +156,27 @@ public class Player : MonoBehaviour
     }
     private void Rotate()
     {
-        //   마우스 커서 가는 방향 보기 레이를 쏴서 그걸 맞은 포인트에 - 현재 내 좌표
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());//Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 1000f))
-        {
-            rotate = new Vector3(hit.point.x, transform.position.y, hit.point.z) - (transform.position);//.normalized;
-        } // 내 마우스 방향
-
-        Quaternion newRotate = Quaternion.LookRotation(rotate);
-        rigid.rotation = Quaternion.Slerp(rigid.rotation, newRotate, 10 * Time.deltaTime); //현재 방향에서 목표방향으로 시간만큼 돌리기 그래서
+        int rotationAngle = 0; //w
+        if (moveDirection.z > 0 && moveDirection.x > 0) rotationAngle = 45;
+        else if (moveDirection.z > 0 && moveDirection.x < 0) rotationAngle = 315;
+        else if (moveDirection.z < 0 && moveDirection.x > 0) rotationAngle = 135; 
+        else if (moveDirection.z < 0 && moveDirection.x < 0) rotationAngle = 225;
+        else if (moveDirection.z < 0) rotationAngle = 180; //d
+        else if (moveDirection.x < 0) rotationAngle = 270; //a //0보다 작을때
+        else if (moveDirection.x > 0) rotationAngle = 90; //d 
+        float currentRotationAngle = Mathf.LerpAngle(transform.eulerAngles.y, rotationAngle + camera.eulerAngles.y, 10 * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0, currentRotationAngle, 0);
+        // //   마우스 커서 가는 방향 보기 레이를 쏴서 그걸 맞은 포인트에 - 현재 내 좌표
+        // Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());//Input.mousePosition);
+        // RaycastHit hit;
+        //
+        // if (Physics.Raycast(ray, out hit, 1000f))
+        // {
+        //     rotate = new Vector3(hit.point.x, transform.position.y, hit.point.z) - (transform.position);//.normalized;
+        // } // 내 마우스 방향
+        //
+        // Quaternion newRotate = Quaternion.LookRotation(rotate);
+        // rigid.rotation = Quaternion.Slerp(rigid.rotation, newRotate, 10 * Time.deltaTime); //현재 방향에서 목표방향으로 시간만큼 돌리기 그래서
 
         //rigid.rotation *= Quaternion.Euler(0.0f, moveDirection.x * 0.5f, 0.0f); //회전
         //  rigid.rotation *= Quaternion.Euler(0.0f, rotate.x, 0.0f);
@@ -173,45 +196,65 @@ public class Player : MonoBehaviour
         if (Player_Hp + hill <= max_Hp)  Player_Hp += hill; //힐 했을때 더한 값이 최대체력보다 낮을떄만 하고 높으면 그냥 최대체력을 줘버리기
         else Player_Hp = max_Hp;
     }
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        playerstate = State.Idle;
+    }
     public void Hit(float Damage) // 회피할때 빼곤 맞음
     {
-        if (playeranim && !playerstate.Equals(State.Dash) && !isDead)
+        if (playeranim && !playerstate.Equals(State.Dash) && !isDead && !playerstate.Equals(State.Hit))
         {
-                Player_Hp -= Damage;
+            Player_Hp -= Damage;
+            Debug.Log("플레이어 맞음" + Player_Hp);
+            if (!isDead)
+            {
+                
                 playeranim.Hit();
+                AudioMgr.instance.PlayAudio(hitAudio);
                 playerstate = State.Hit;
-                Debug.Log("맞음" + Player_Hp);
+                StartCoroutine(Timer());
+            }
+           else AudioMgr.instance.PlayAudio(dieAudio);
         }
     }
     private void Movement()
     {
         if (rigid)
         {
-            int x = 1, z = 1;
+            float x = moveDirection.x, z = moveDirection.z;
             //애니메이션
             //transform.rotation = Quaternion.LookRotation(moveDirection); //회전
             //   transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * moveDirection.y); //이동
+
+            // Quaternion newRotate = Quaternion.LookRotation(rotate + new Vector3(0, 0, 0));
+            // rigid.rotation = Quaternion.Slerp(rigid.rotation, newRotate, 10 * Time.deltaTime); //현재 방향에서 목표방향으로 시간만큼 돌리기 그래서
             Rotate();
             if (moveDirection.x != 0) playeranim.Move(moveDirection.x);
             else playeranim.Move(moveDirection.z);
-            //    Debug.Log(transform.forward);
-            // Debug.Log(transform.right);
-            // if (transform.forward.z < 0) z = -1;
-            //if (transform.right.x < 0) x = -1;
-            Vector3 velocity = new Vector3(0, 0, z) * moveDirection.z * moveSpeed; //transform.forward * moveDirection.z * moveSpeed; //이동
-            Vector3 velocity_x = new Vector3(x, 0, 0) * moveDirection.x * moveSpeed;//transform.right * moveDirection.x * moveSpeed;
-            rigid.velocity = velocity + velocity_x; //이동
+            if (x != 0 || z != 0)
+            {
+                Vector3 velocity = new Vector3(x, 0, z) + playeranim.transform.forward * moveSpeed;
+                //    Vector3 velocity = new Vector3(x, 0,z) * moveSpeed; //이동                                     
+                rigid.velocity = velocity; //+ velocity_x; //이동
+            }
         }
+    }
+    public void restart()
+    {
+        playerstate = State.Idle;
     }
     private IEnumerator Die() //정지시키고 뭐 해야할듯
     {
         // if(playerstate.Equals(State.Death)) playeranim.Die();
         playerstate = State.Death;
         playeranim.Die(true);
+        
         yield return new WaitForSeconds(1f);
-        playeranim.Die(true);
+
         //   gameObject.SetActive(false);
         MaxHPMP();
+        playeranim.Die(false);
         monster.Deactivation();
         infoUi.On();
     }
@@ -244,7 +287,6 @@ public class Player : MonoBehaviour
             StartCoroutine(Die());
         }
     }
-
     IEnumerator SwordColliderMaintain() // 콜라이더 유지시간
     {
         swordCollider.On();
@@ -255,16 +297,26 @@ public class Player : MonoBehaviour
     {
         //if (other.tag.Equals("Monster")) other.GetComponent<Monster>().Hit(Player_Atk);
     } //이건 검에 따로 달 예정 콜라이더
-    public void OnAttack()
-    {
+    public void OnAttack(int Combo)
+    {//임시 캐릭터 용 코드 나중에 지워도됨
         swordEffect.On();
         swordCollider.On(); //애니메이션 이벤트에 넣었음
+        StartCoroutine(AttackEffect(Combo));
+        AudioMgr.instance.PlayAudio(swordAudio);
     }
-    public void OffAttack()
+    public void OffAttack(int Combo)
     {
         swordEffect.Off();
         swordCollider.Off();
+        ps[Combo].Stop();
     }
+    private IEnumerator AttackEffect(int Combo)
+    {
+        if (Combo < 2) yield return new WaitForSeconds(0.15f);
+        else yield return new WaitForSeconds(0.25f);
+        ps[Combo].Play();
+    }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -274,7 +326,7 @@ public class Player : MonoBehaviour
     public void OnLeftMouse(InputAction.CallbackContext context)
     {
         bool mouse = context.ReadValueAsButton();
-        if (mouse && playeranim)
+        if (mouse && playeranim && !playerstate.Equals(State.Death))
         {
             playeranim.Attack();
         //    playerstate = State.Attack;
@@ -284,7 +336,7 @@ public class Player : MonoBehaviour
     public void OnRun(InputAction.CallbackContext context)
     {
         bool run = context.ReadValueAsButton();
-        if (playeranim)
+        if (playeranim && !playerstate.Equals(State.Death))
         {
             playeranim.Run(run);
             if(run) moveSpeed = 10f;
@@ -295,7 +347,7 @@ public class Player : MonoBehaviour
     public void OnDesh(InputAction.CallbackContext context)
     {
         bool desh = context.ReadValueAsButton();
-        if(playeranim)
+        if(playeranim && !playerstate.Equals(State.Death))
         {
             if (desh)
             {

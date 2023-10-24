@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RightMouse",
+                    "type": "Button",
+                    "id": "bd584cb2-c2ac-428d-b6b1-cf3cbc90f742",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -252,6 +261,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ESkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "702ace8b-9f96-42a4-bf07-6dfcadec2cf3",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "RightMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

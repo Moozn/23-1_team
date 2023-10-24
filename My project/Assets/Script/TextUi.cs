@@ -15,8 +15,8 @@ public class TextUi : MonoBehaviour
     public void statText(float lv,float curexp, PlayerStat Stat)//float nextexp,float damage, float Df, float vgr, float mnt)
     {
         player_Lv.text = "현재레벨 : " + lv;
-        player_CurExp.text = "소지 경험치 : " + curexp;
-        player_NextExp.text = "필요 경험치 : " + Stat.NextExp;
+        player_CurExp.text = "소지 경험치 : " + curexp.ToString("N1");
+        player_NextExp.text = "필요 경험치 : " + Stat.NextExp.ToString("N1");
         player_Vgr.text = "생명력 : " + Stat.vgr;
         Player_Mnt.text = "정신력 : " + Stat.mnt.ToString("N1");
         player_Atk.text = "공격력 : " + Stat.str.ToString("N1");
