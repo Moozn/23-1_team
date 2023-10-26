@@ -32,8 +32,8 @@ public struct PlayerStat
 public class Player : MonoBehaviour
 { //소리 이펙트 넣기
     [SerializeField] SetUI swordCollider;
-    [SerializeField] SetUI swordEffect;
-    [SerializeField] ParticleSystem[] ps = new ParticleSystem[3];
+ //   [SerializeField] SetUI swordEffect;
+ //   [SerializeField] ParticleSystem[] ps = new ParticleSystem[3];
     [SerializeField] private State playerstate;
     [SerializeField] private weapon sword; // 검콜라이더
     [SerializeField] private SliderScript hp_slider;
@@ -46,7 +46,6 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource dieAudio;
     [SerializeField] private AudioSource swordAudio;
     [SerializeField] private Transform camera;
-    private bool move;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
     private Rigidbody rigid;
@@ -87,7 +86,6 @@ public class Player : MonoBehaviour
         Player_Mp = 50;
         max_mp = Player_Mp;
         MpRecoverytime = 0f;
-        move = false;
         Stat_CalculationFormula(1);
         Stat_CalculationFormula(2);
         Stat_CalculationFormula(3);
@@ -222,17 +220,14 @@ public class Player : MonoBehaviour
             if (moveDirection.x != 0) playeranim.Move(moveDirection.x);
             else playeranim.Move(moveDirection.z);
             Vector3 velocity = new Vector3(x, 0, z) + playeranim.transform.forward * moveSpeed;
-            if (x != 0 || z != 0)
+            if ((playeranim.Equals(State.Attack)))
             {
-                move = true;
-
-                //    Vector3 velocity = new Vector3(x, 0,z) * moveSpeed; //이동                                     
-                rigid.velocity = velocity; //+ velocity_x; //이동
+                rigid.velocity = velocity;
             }
-            else if (x == 0 && z == 0)
+            else if (x != 0 || z != 0)
             {
-                if (playeranim.Equals(State.Attack)) rigid.velocity = velocity;
-                move = false;
+                rigid.velocity = velocity;
+
             }
             Rotate();
         }
@@ -298,24 +293,24 @@ public class Player : MonoBehaviour
     } //이건 검에 따로 달 예정 콜라이더
     public void OnAttack(int Combo)
     {//임시 캐릭터 용 코드 나중에 지워도됨
-        swordEffect.On();
+       // swordEffect.On();
         swordCollider.On(); //애니메이션 이벤트에 넣었음
-        StartCoroutine(AttackEffect(Combo));
+    //    StartCoroutine(AttackEffect(Combo));
         playerstate = State.Attack;
         AudioMgr.instance.PlayAudio(swordAudio);
     }
     public void OffAttack(int Combo)
     {
-        swordEffect.Off();
+       // swordEffect.Off();
         swordCollider.Off();
         playerstate = State.Idle;
-        ps[Combo].Stop();
+      //  ps[Combo].Stop();
     }
     private IEnumerator AttackEffect(int Combo)
     {
         if (Combo < 2) yield return new WaitForSeconds(0.15f);
         else yield return new WaitForSeconds(0.25f);
-        ps[Combo].Play();
+     //   ps[Combo].Play();
     }
 
 
