@@ -1,45 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 public class ThirdPersonCamera : MonoBehaviour
 {
-    public Transform player;  // 플레이어 캐릭터의 Transform 컴포넌트
-    public float rotationSpeed = 2.0f;  // 카메라 회전 속도
-    public float zoomSpeed = 2.0f;  // 카메라 줌 속도 각도
-    public float minAngle = 4.0f;  // 최소 줌 거리 각도
-    public float maxAngle = 10.0f;  // 최대 줌 거리 각도
-    public float minZoomDistance = 10.0f;  // 휠 조정 최소 줌 거리
-    public float maxZoomDistance = 30.0f;  // 휠 조정 최대 줌 거리
-    public float wheelzoomSpeed = 20.0f;  // 
-    public Vector3 offset;  // 플레이어 캐릭터와 카메라 사이의 거리
+    public Transform target; // The target to follow (the playable character)
+    public float minDistance = 2.0f; // Minimum distance from the target
+    public float maxDistance = 10.0f; // Maximum distance from the target
+    public float sensitivityX = 5.0f; // X-axis rotation sensitivity
+    public float sensitivityY = 2.0f; // Y-axis rotation sensitivity
+    public float minYAngle = -30.0f; // Minimum Y-axis rotation angle
+    public float maxYAngle = 80.0f; // Maximum Y-axis rotation angle
+
+    private float currentDistance;
+    private float rotationX = 0.0f;
+    private float rotationY = 0.0f;
+
     void Start()
     {
-        offset = transform.position - player.position;  // 초기 거리 설정
+        Cursor.lockState = CursorLockMode.Locked; // Lock the cursor to the center of the screen
+        Cursor.visible = false; // Hide the cursor
+        currentDistance = (minDistance + maxDistance) / 2;
     }
 
-
-    void LateUpdate()
+    void Update()
     {
-        float horizontalInput = Input.GetAxis("Mouse X") * rotationSpeed;
-        float verticalInput = -Input.GetAxis("Mouse Y") * rotationSpeed;
+        // Calculate camera rotation based on mouse input
+        rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+        rotationY -= Input.GetAxis("Mouse Y") * sensitivityY;
+        rotationY = Mathf.Clamp(rotationY, minYAngle, maxYAngle);
 
-        // 카메라 회전
-        Quaternion rotation = Quaternion.Euler(0, horizontalInput, 0);
-        offset = rotation * offset;
+        // Zoom in/out with the mouse scroll wheel
+        currentDistance -= Input.GetAxis("Mouse ScrollWheel");
+        currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
 
-        // 카메라 상하 이동
-        offset = new Vector3(offset.x, Mathf.Clamp(offset.y + verticalInput, minAngle, maxAngle), offset.z);
+        // Apply rotation to the camera
+        transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
 
+        // Calculate desired camera position
+        Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
 
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-        float newDistance = offset.magnitude - scrollInput * wheelzoomSpeed;
-        
-        newDistance = Mathf.Clamp(newDistance, minZoomDistance, maxZoomDistance);
-        offset = offset.normalized * newDistance;
+        // Apply the position to the camera
+        transform.position = desiredPosition;
 
-
-        transform.position = player.position + offset;
-        transform.LookAt(player.position);
+        // Look at the target (the playable character)
+        transform.LookAt(target);
     }
 }

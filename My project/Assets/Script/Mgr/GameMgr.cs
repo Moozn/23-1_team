@@ -1,37 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
-public sealed class GameMgr : MonoBehaviour // 다른 클래스에서 상속받을 수 없음
+using UnityEngine.SceneManagement;
+public class GameMgr : MonoBehaviour
 {
-    static GameMgr instance = null;
+    public static GameMgr instance = null;
     public static GameMgr Instance
     {
         get
         {
-            if(!instance)
+            if (!instance)
             {
                 instance = FindObjectOfType<GameMgr>();
-                if (!instance) instance = new GameObject("GmaeManagr").AddComponent<GameMgr>();
-
+                if (!instance) instance = new GameObject("GameManager").AddComponent<GameMgr>();
                 instance.Initialize();
                 DontDestroyOnLoad(instance.gameObject);
             }
             return instance;
         }
     }
-
-    PlayerInput input;
-    [SerializeField] Player player;
-
-    private void Awake()
+    private void Awake() { if (this != Instance) Destroy(gameObject); }
+    void Initialize() { }// EnemyTest(); } // 테스트 후 삭제 예정!!
+    public void SceneChange(int SceneNum)
     {
-        if (this != Instance) Destroy(gameObject);
-    }
+        switch (SceneNum)
+        {
+            case 0:
+                SceneManager.LoadScene("GameScene");
+                break;
+            case 1:
+                SceneManager.LoadScene("TitleScene");
+                break;
+        }
 
-    void Initialize() 
-    {
     }
-    void StartGame() { }
 }

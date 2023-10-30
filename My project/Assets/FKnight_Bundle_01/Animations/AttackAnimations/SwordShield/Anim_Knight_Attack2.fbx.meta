@@ -67,19 +67,33 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.048611097
+      - time: 0.032838225
         functionName: OnAttack
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 1
         messageOptions: 0
-      - time: 0.7759042
+      - time: 0.18927443
+        functionName: OnEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.44467384
+        functionName: OffEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.7507887
         functionName: OffAttack
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 1
         messageOptions: 0
       transformMask:
       - path: 

@@ -10896,77 +10896,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.32985103, y: 0.0105075445, z: -0.000008381903}
     m_Extent: {x: 0.04632555, y: 0.062175028, z: 0.045683403}
   m_DirtyAABB: 0
---- !u!1 &2918172697249895259
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2918172697249895258}
-  - component: {fileID: 2918172697249895257}
-  - component: {fileID: 2918172697249895255}
-  - component: {fileID: 2918172697249895256}
-  m_Layer: 0
-  m_Name: Sword_Collider
-  m_TagString: Weapon
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2918172697249895258
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2918172697249895259}
-  m_LocalRotation: {x: 0.5635382, y: -0.13845924, z: -0.049724717, w: 0.8128845}
-  m_LocalPosition: {x: 0.353, y: -0.425, z: 1.214}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6809851146076377750}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 64.477, y: -40.731, z: -33.354}
---- !u!65 &2918172697249895257
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2918172697249895259}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.05, y: 0.1, z: 0.5}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2918172697249895255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2918172697249895259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7cb8e511c648a43bcd3878343d66ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2918172697249895256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2918172697249895259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66851dbe1d9e11c46ba404b42fe4d8bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2950942102858796100
 GameObject:
   m_ObjectHideFlags: 0
@@ -20257,14 +20186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a52f1aae41ad634a914363162c3d97d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swordCollider: {fileID: 2918172697249895255}
-  swordEffect: {fileID: 0}
-  ps:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  swordCollider: {fileID: 0}
   playerstate: 0
-  sword: {fileID: 2918172697249895256}
+  sword: {fileID: 0}
   hp_slider: {fileID: 0}
   mp_slider: {fileID: 0}
   text: {fileID: 0}
@@ -31567,8 +31491,7 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2918172697249895258}
+  m_Children: []
   m_Father: {fileID: 4741940497915756479}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
