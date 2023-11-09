@@ -442,18 +442,32 @@ ModelImporter:
       curves: []
       events:
       - time: 0.23227383
-        functionName: OnAttack
+        functionName: OffEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 0.31295845
+        functionName: NewEvent
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.7031391
-        functionName: OffAttack
+      - time: 0.4205379
+        functionName: NewEvent
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 0.7031391
+        functionName: OnEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 2
         messageOptions: 0
       transformMask:
       - path: 

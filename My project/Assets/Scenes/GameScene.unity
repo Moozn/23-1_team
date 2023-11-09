@@ -4109,6 +4109,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4362472259802890, guid: e60d36cff17a1ce4db49ef54f9e72f61, type: 3}
   m_PrefabInstance: {fileID: 881231780}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &881231782 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198393960337124616, guid: e60d36cff17a1ce4db49ef54f9e72f61, type: 3}
+  m_PrefabInstance: {fileID: 881231780}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &893945890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 959995844583312320, guid: dd2b8cd7bb9b3b14f8ac4f51b9c43d25, type: 3}
@@ -8851,6 +8856,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1682913944}
     - target: {fileID: 2918172696549800825, guid: 7102301acbfa324408de138d80821761, type: 3}
+      propertyPath: ps.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2918172696549800825, guid: 7102301acbfa324408de138d80821761, type: 3}
       propertyPath: swordCollider
       value: 
       objectReference: {fileID: 778346388}
@@ -8860,6 +8869,10 @@ PrefabInstance:
       objectReference: {fileID: 1574483135}
     - target: {fileID: 2918172696549800825, guid: 7102301acbfa324408de138d80821761, type: 3}
       propertyPath: ps.Array.data[1]
+      value: 
+      objectReference: {fileID: 881231782}
+    - target: {fileID: 2918172696549800825, guid: 7102301acbfa324408de138d80821761, type: 3}
+      propertyPath: ps.Array.data[2]
       value: 
       objectReference: {fileID: 611688844}
     - target: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}

@@ -448,6 +448,20 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.26405868
+        functionName: OnEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.39853302
+        functionName: OffEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.7377153
         functionName: OffAttack
         data: 
