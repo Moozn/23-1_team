@@ -36,7 +36,7 @@ public class AudioMgr : MonoBehaviour
     {
         this.volume = _volume;
         this.bgm = _bgm;
-        backgroundAudio.volume = bgm;
+     //   backgroundAudio.volume = bgm;
     }
     public void BGMUpdate(float _volume)
     {
@@ -46,5 +46,11 @@ public class AudioMgr : MonoBehaviour
     {
         audio.volume = volume;
         audio.Play();
+    }
+
+    public void PlayAudioStop(AudioSource audio)
+    {
+        audio.volume = volume;
+        audio.Stop();
     }
 }

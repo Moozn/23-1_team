@@ -16,4 +16,9 @@ public class SetUI : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void SetPosition(Vector3 target)
+    {
+        gameObject.transform.position = target;
+    }
 }

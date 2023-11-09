@@ -41,6 +41,12 @@ public class Monster : MonoBehaviour
     private int min, max;
     private bool dash_; //흠.. 변수이르  ㅁ 뭘로하지 일단 이건 콜라이더가 머리에도 몸에도 있어서 2번씩 닿기떄문에 그냥 한번 닿으면 false해주고 다시 true로 한번만 닿게 할꺼임
     private float stiffen; //경직
+    [SerializeField] private ParticleSystem breath;
+    [SerializeField] private SetUI magicalCamp; //마법진
+    [SerializeField] private ParticleSystem magical_Camp; //마법진
+    [SerializeField] private ParticleSystem magical; 
+    private float maicalTime;
+    [SerializeField] private AudioSource breath_Audio;
     private void Init()
     {
         Mob_HpMax = 10000f;
@@ -62,10 +68,13 @@ public class Monster : MonoBehaviour
         pattern_var = 1;
         // r_hand.Set_Damage(10);
         // l_hand.Set_Damage(10);
+        magicalCamp.Off();
         dash_ = true;
         stiffen = 100f;
         fly = false;
         falling = false;
+        magicalCamp.On();
+        maicalTime = 1.5f;
     }
     private void Awake()
     {
@@ -180,6 +189,7 @@ public class Monster : MonoBehaviour
 
 
     }
+
     private IEnumerator Timer()
     {
         yield return new WaitForSeconds(0.1f);
@@ -199,17 +209,21 @@ public class Monster : MonoBehaviour
             {
                 case 0: //팔 휘두르기 2
                     attack2 = true;
-                    StartCoroutine(Attack());
+                  //  StartCoroutine(Attack());
+                    StartCoroutine(MagicalCamp());
                     break;
                 case 1: //팔 휘두르기 1
                     attack2 = false;
-                    StartCoroutine(Attack());
+                    //   StartCoroutine(Attack());
+                    StartCoroutine(MagicalCamp());
                     break;
                 case 2: //브레스 길게
-                    StartCoroutine(Breth_Long());
+                        //  StartCoroutine(Breth_Long());
+                    StartCoroutine(MagicalCamp());
                     break;
                 case 3:
-                    StartCoroutine(Breth_Short());
+                    //  StartCoroutine(Breth_Short());
+                    StartCoroutine(MagicalCamp());
                     break;
             }
         }
@@ -268,154 +282,36 @@ public class Monster : MonoBehaviour
     {
         return Vector3.Distance(transform.position, player.transform.position);
     }
+    private IEnumerator MagicalCamp()
+    {
+      
+        magicalCamp.SetPosition(new Vector3(player.transform.position.x, 0.2f, player.transform.position.z));//player.transform.position);
+        magical_Camp.Play();
+        yield return new WaitForSeconds(1.5f);
+        magical_Camp.Stop();
+        magical.Play();
+        yield return new WaitForSeconds(0.5f);
+        magical.Stop();
+        StartCoroutine(Pattern());
+    }
     IEnumerator Breth_Long()
     {
+        AudioMgr.Instance.PlayAudio(breath_Audio);
         anim.SetTrigger("Breth_Long");
+        breath.Play();
         yield return new WaitForSeconds(3.6f);
+        AudioMgr.Instance.PlayAudioStop (breath_Audio);
+        breath.Stop();
         cooltime = 3f;
         StartCoroutine(Pattern());
     }
     IEnumerator Breth_Short()
     {
         anim.SetTrigger("Breth_Short");
+        AudioMgr.Instance.PlayAudio(breath_Audio);
         yield return new WaitForSeconds(2f);
+        AudioMgr.Instance.PlayAudioStop(breath_Audio);
         cooltime = 2f;
         StartCoroutine(Pattern());
     }
-
-    // private void Exploration() //탐색
-    // {
-    //     float dis = distance();
-    //
-    //     if (dis <= dis_Pattern1 && delay)
-    //     {
-    //         min = 0;
-    //         max = 1;
-    //         if (dis <= dis_Pattern2) //패턴은 think로 계속 돌려주고 행동은 값을 통해 제어해줌
-    //         {
-    //             if (dis <= dis_Pattern3)
-    //             {
-    //                 min = 3;
-    //                 max = 5;
-    //             }
-    //             else
-    //             {
-    //                 min = 1;
-    //                 max = 3;
-    //             }
-    //         }
-    //         else state = MonstrState.Run;
-    //     }
-    // }
-    // IEnumerator Think()
-    // {
-    //     yield return new WaitForSeconds(0.1f);
-    //
-    //     int ranpattern = Random.Range(min, max);
-    //     Debug.Log(ranpattern);
-    //     yield return new WaitForSeconds(0.5f);
-    //     if(stiffen <= 0)
-    //     {
-    //         StartCoroutine(Stern());
-    //         stiffen = 100f;
-    //     }
-    //     else if (stemina >= 30)
-    //     {
-    //         stemina -= 20;
-    //
-    //         StartCoroutine(Rush());
-    //         switch (ranpattern)
-    //         {
-    //             case 0:
-    //                 StartCoroutine(Delay());
-    //                 break;
-    //             case 1:
-    //                 StartCoroutine(Rush());
-    //                 break;
-    //             case 2:
-    //                 StartCoroutine(Breth());
-    //                 break;
-    //             case 3:
-    //                 StartCoroutine(Attack());
-    //                 break;
-    //             case 4:
-    //                 StartCoroutine(JumpAttack());
-    //                 break;
-    //         }
-    //     }
-    //     else StartCoroutine(Stemina_Recovery());
-    // }
-
-    // public void Attack2()
-    // {
-    //     anim.SetTrigger("Attack2");
-    // }
-    // IEnumerator Stern()
-    // {
-    //     state = MonstrState.Hit;
-    //   //  anim.SetTrigger("Attack");
-    //     yield return new WaitForSeconds(3f);
-    //     state = MonstrState.Idle;
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator Attack()
-    // {
-    //     state = MonstrState.Attack;
-    //     anim.SetTrigger("Attack");
-    //    // r_handCoillder.On();
-    //    // l_handCoillder.On();
-    //     yield return new WaitForSeconds(0.5f);
-    //    // r_handCoillder.Off();
-    //    // l_handCoillder.Off();
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator Rush()
-    // {
-    //
-    //     anim.SetBool("Dash", true);
-    //     agent.isStopped = false;
-    //     state = MonstrState.Dash;
-    //     dash_ = true;
-    //     yield return new WaitForSeconds(1f);
-    //     state = MonstrState.Idle;
-    //     anim.SetBool("Dash", false);
-    //     agent.isStopped = true;
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator Stemina_Recovery()
-    // {
-    //     yield return new WaitForSeconds(2f);
-    //     stemina += 100;
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator Delay()
-    // {
-    //     yield return new WaitForSeconds(0.5f);
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator MoveStop()
-    // {
-    //     yield return new WaitForSeconds(0.5f);
-    //     anim.SetFloat("Run", 0);
-    //     agent.isStopped = true;
-    // }
-    // IEnumerator JumpAttack()
-    // {
-    //     anim.SetTrigger("JumpAttack");
-    //     state = MonstrState.Attack;
-    //    // r_handCoillder.On();
-    //     yield return new WaitForSeconds(0.5f);
-    //     state = MonstrState.Idle;
-    //   //  r_handCoillder.Off();
-    //     StartCoroutine(Think());
-    // }
-    // IEnumerator Breth()
-    // {
-    //     anim.SetTrigger("Breth");
-    //     state = MonstrState.Breth;
-    //     yield return new WaitForSeconds(1f);
-    //     state = MonstrState.Idle;
-    //     StartCoroutine(Think());
-    // }
-
 }

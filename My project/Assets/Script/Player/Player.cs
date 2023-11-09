@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
 { //소리 이펙트 넣기
     [SerializeField] SetUI swordCollider;
     [SerializeField] SetUI swordEffect;
-    [SerializeField] ParticleSystem[] ps = new ParticleSystem[2];
+    [SerializeField] ParticleSystem[] ps = new ParticleSystem[3];
     [SerializeField] private State playerstate;
     [SerializeField] private weapon sword; // 검콜라이더
     [SerializeField] private SliderScript hp_slider;
