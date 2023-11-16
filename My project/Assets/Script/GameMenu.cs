@@ -8,7 +8,7 @@ public class GameMenu : MonoBehaviour
 
     private void Start()
     {
-        if (menu != null) menu.Off();
+        if (menu != null) menu.On();
     }
 
     public void OnMenuOn()
