@@ -42,9 +42,11 @@ public class Player : MonoBehaviour
     [SerializeField] private SetUI infoUi;
     [SerializeField] private Monster monster;
     [SerializeField] private PlayerAnim playeranim;
-    [SerializeField] private AudioSource hitAudio;
-    [SerializeField] private AudioSource dieAudio;
-    [SerializeField] private AudioSource swordAudio;
+    [SerializeField] private AudioSource hitAudio; //맞는소리
+    [SerializeField] private AudioSource dieAudio;  //죽는소리
+    [SerializeField] private AudioSource swordAudio;//검소리
+    [SerializeField] private AudioSource shieldAudio; //방패소리
+    [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private Transform camera;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -205,7 +207,7 @@ public class Player : MonoBehaviour
             {
 
                 playeranim.Hit();
-                AudioMgr.instance.PlayAudio(hitAudio);
+                AudioMgr.instance.PlayAudio(hitAudio); //여기가 소리
                 playerstate = State.Hit;
                 StartCoroutine(Timer());
             }
@@ -299,17 +301,18 @@ public class Player : MonoBehaviour
     }
     public void OffAttack(int Combo)
     {
+        swordCollider.Off();
         playerstate = State.Idle;
     }
     public void OnEffect(int Combo)
     {
         swordEffect.On();
-        ps[Combo].Play();
+     if(Combo != 2)   ps[Combo].Play();
     }
     public void OffEffect(int Combo)
     {
         ps[Combo].Stop();
-        swordEffect.Off();
+      //  swordEffect.Off();
     }
     private IEnumerator AttackEffect(int Combo)
     {
@@ -353,6 +356,7 @@ public class Player : MonoBehaviour
             if (desh)
             {
                 playeranim.Dash();
+                AudioMgr.Instance.PlayAudio(rollingAudio); //구르기
                 //  playerstate = State.Desh;
             }
         }

@@ -7,7 +7,9 @@ public class SkillMgr : MonoBehaviour
 {
     public static SkillMgr instance = null;
     [SerializeField] private Skill[] skills = new Skill[3];
-
+    [SerializeField] private AudioSource QskillAudio;
+    [SerializeField] private AudioSource WskillAudio;
+    [SerializeField] private AudioSource EskillAudio;
     private void Awake()
     {
         if (this != Instance) Destroy(gameObject);
@@ -38,17 +40,30 @@ public class SkillMgr : MonoBehaviour
     public void OnQSkill(InputAction.CallbackContext context)
     {
         bool Q = context.ReadValueAsButton();
-        if (Q) OnSkill(0);
+        if (Q)
+        {
+            OnSkill(0);
+            AudioMgr.Instance.PlayAudio(QskillAudio);
+        }
     }
     public void OnWSkill(InputAction.CallbackContext context)
     {
         bool W = context.ReadValueAsButton();
-        if (W) OnSkill(1);
+        if (W)
+        {
+            OnSkill(1);
+            AudioMgr.Instance.PlayAudio(WskillAudio);
+        }
     }
     public void OnESkill(InputAction.CallbackContext context)
     {
         bool E = context.ReadValueAsButton();
-        if (E) OnSkill(2);
+        if (E)
+        {
+            OnSkill(2);
+            AudioMgr.Instance.PlayAudio(EskillAudio);
+        }
+
     }
     private void OnSkill(int skill)
     {

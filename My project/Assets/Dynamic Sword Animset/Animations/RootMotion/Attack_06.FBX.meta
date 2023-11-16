@@ -441,29 +441,36 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.23227383
+      - time: 0.20057498
+        functionName: OnEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 0.20270205
+        functionName: OnAttack
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.27951226
+        functionName: OnEffect
+        data: 
+        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 0.39894047
         functionName: OffEffect
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
-      - time: 0.31295845
-        functionName: NewEvent
-        data: 
-        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.4205379
-        functionName: NewEvent
-        data: 
-        objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
-        floatParameter: 0
-        intParameter: 2
-        messageOptions: 0
-      - time: 0.7031391
-        functionName: OnEffect
+      - time: 0.6955639
+        functionName: OffAttack
         data: 
         objectReferenceParameter: {fileID: 4983982286741565082, guid: 7102301acbfa324408de138d80821761, type: 3}
         floatParameter: 0

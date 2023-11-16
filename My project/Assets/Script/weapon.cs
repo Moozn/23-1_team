@@ -12,10 +12,15 @@ public class weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Monster") && !this.tag.Equals(other.tag)) other.GetComponentInParent<Monster>().Hit(damage);
+        if (other.tag.Equals("Monster") && !this.tag.Equals(other.tag))
+        {
+            other.GetComponentInParent<Monster>().Hit(damage);
+          //  other.GetComponentInParent<HitEffect>().ShowHitEffect();
+        }
         else if (other.tag.Equals("Player") && this.GetComponentInParent<Monster>().isAttack())
         {
             other.GetComponent<Player>().Hit(damage);
         }
-    } 
+    }
+    
 }

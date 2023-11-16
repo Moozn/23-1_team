@@ -41,12 +41,26 @@ public class Monster : MonoBehaviour
     private int min, max;
     private bool dash_; //흠.. 변수이르  ㅁ 뭘로하지 일단 이건 콜라이더가 머리에도 몸에도 있어서 2번씩 닿기떄문에 그냥 한번 닿으면 false해주고 다시 true로 한번만 닿게 할꺼임
     private float stiffen; //경직
+    [SerializeField] private ParticleSystem hitEffect;
     [SerializeField] private ParticleSystem breath;
-    [SerializeField] private SetUI magicalCamp; //마법진
+    [SerializeField] private ParticleSystem breath_2;
+    [SerializeField] private SetUI magicalCamp; //마법진 마법 묶음
+    [SerializeField] private SetUI magicalCircle; //마법진
+    [SerializeField] private SetUI set_hitEffect; //마법진
     [SerializeField] private ParticleSystem magical_Camp; //마법진
     [SerializeField] private ParticleSystem magical; 
     private float maicalTime;
-    [SerializeField] private AudioSource breath_Audio;
+    [SerializeField] private AudioSource breath_Audio1; //브레스1
+    [SerializeField] private AudioSource breath_Audio2; //브레스2
+    [SerializeField] private AudioSource swingAudio1; //휘두르기1
+    [SerializeField] private AudioSource swingAudio2; //휘두르기2
+    [SerializeField] private AudioSource hitAudio; //피격
+    [SerializeField] private AudioSource dieAudio; //죽음
+    [SerializeField] private AudioSource magicalcreatAudio; // 마법진 깔릴때
+    [SerializeField] private AudioSource roarAudio; // 포효
+    [SerializeField] private AudioSource magicalAudio; // 마법소리 
+
+    private bool b_magical;
     private void Init()
     {
         Mob_HpMax = 10000f;
@@ -73,8 +87,9 @@ public class Monster : MonoBehaviour
         stiffen = 100f;
         fly = false;
         falling = false;
-        magicalCamp.On();
+
         maicalTime = 1.5f;
+        b_magical = false;
     }
     private void Awake()
     {
@@ -113,6 +128,8 @@ public class Monster : MonoBehaviour
         if (!state.Equals(MonstrState.Hit))
         {
             state = MonstrState.Hit;
+            set_hitEffect.On();
+            hitEffect.Play();
             StartCoroutine(Timer());
             Mob_Hp -= Damage;
             stiffen -= 5f;
@@ -185,7 +202,7 @@ public class Monster : MonoBehaviour
        if (state.Equals(MonstrState.Run)) Move();
        Lookat();
         //  else StartCoroutine(MoveStop());
-      
+      if(b_magical) magicalCamp.SetPosition(new Vector3(player.transform.position.x, 0.2f, player.transform.position.z));//player.transform.position);
 
 
     }
@@ -194,6 +211,8 @@ public class Monster : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         state = MonstrState.Idle;
+        hitEffect.Stop();
+        set_hitEffect.Off();
     }
     private IEnumerator Pattern()
     {
@@ -262,6 +281,7 @@ public class Monster : MonoBehaviour
     {
         state = MonstrState.Attack;
         anim.SetTrigger("Attack");
+        AudioMgr.Instance.PlayAudio(swingAudio1); //스윙1
         yield return new WaitForSeconds(2f);
         if (attack2)
         {
@@ -277,6 +297,8 @@ public class Monster : MonoBehaviour
     {
         state = MonstrState.Attack;
         anim.SetTrigger("Attack2");
+        AudioMgr.Instance.PlayAudio(swingAudio2);//스윙2
+
     }
     private float distance()
     {
@@ -284,23 +306,35 @@ public class Monster : MonoBehaviour
     }
     private IEnumerator MagicalCamp()
     {
-      
-        magicalCamp.SetPosition(new Vector3(player.transform.position.x, 0.2f, player.transform.position.z));//player.transform.position);
+        b_magical = true;
+        magicalCamp.On();
+        magicalCircle.On();
         magical_Camp.Play();
+        AudioMgr.Instance.PlayAudio(magicalcreatAudio);
+        yield return new WaitForSeconds(1f);
+        AudioMgr.Instance.PlayAudio(roarAudio); //포효를 어디에 넣지 하다가 일단 생성 떨어지기 중간에 넣었음
         yield return new WaitForSeconds(1.5f);
+        b_magical = false;
         magical_Camp.Stop();
+        magicalCircle.Off();
+        StartCoroutine(Magical());
+    }
+    private IEnumerator Magical()
+    {
         magical.Play();
+        AudioMgr.Instance.PlayAudio(magicalAudio);
         yield return new WaitForSeconds(0.5f);
         magical.Stop();
+        magicalCamp.Off();
         StartCoroutine(Pattern());
     }
     IEnumerator Breth_Long()
     {
-        AudioMgr.Instance.PlayAudio(breath_Audio);
+        AudioMgr.Instance.PlayAudio(breath_Audio1);
         anim.SetTrigger("Breth_Long");
         breath.Play();
         yield return new WaitForSeconds(3.6f);
-        AudioMgr.Instance.PlayAudioStop (breath_Audio);
+        //AudioMgr.Instance.PlayAudioStop (breath_Audio1);
         breath.Stop();
         cooltime = 3f;
         StartCoroutine(Pattern());
@@ -308,9 +342,11 @@ public class Monster : MonoBehaviour
     IEnumerator Breth_Short()
     {
         anim.SetTrigger("Breth_Short");
-        AudioMgr.Instance.PlayAudio(breath_Audio);
+        AudioMgr.Instance.PlayAudio(breath_Audio2);
+        breath_2.Play(); //브레스 짧은거
         yield return new WaitForSeconds(2f);
-        AudioMgr.Instance.PlayAudioStop(breath_Audio);
+        breath_2.Stop();
+        // AudioMgr.Instance.PlayAudioStop(breath_Audio1);
         cooltime = 2f;
         StartCoroutine(Pattern());
     }
