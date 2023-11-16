@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
     private PlayerStat m_playerStat; //캐릭터 스텟
     private float Player_Hp; //체력
     private float Player_Mp; //마나
+    private bool backrolling;
                              // private float Player_Vgr; //생명력
                              //private float Player_Mnt;//정신력
                              // private int rotationAngle = 0;
@@ -68,6 +69,7 @@ public class Player : MonoBehaviour
     private float max_Hp;
     private float max_mp;
     private float MpRecoverytime; //마나회복 시간 ex)1초마다
+    private Vector2 input;
     private bool isDead => (0 >= Player_Hp); // 죽음 상태 확인
     public void Initialize()
     {
@@ -88,6 +90,7 @@ public class Player : MonoBehaviour
         Player_Mp = 50;
         max_mp = Player_Mp;
         MpRecoverytime = 0f;
+        backrolling = false;
         Stat_CalculationFormula(1);
         Stat_CalculationFormula(2);
         Stat_CalculationFormula(3);
@@ -221,14 +224,25 @@ public class Player : MonoBehaviour
             float x = moveDirection.x, z = moveDirection.z;
             if (moveDirection.x != 0) playeranim.Move(moveDirection.x);
             else playeranim.Move(moveDirection.z);
-            Vector3 velocity = new Vector3(x, 0, z) + playeranim.transform.forward * moveSpeed;
-            if ((playeranim.Equals(State.Attack)))
+            Vector3 velocity = new Vector3(x, 0, z)  +playeranim.transform.forward * moveSpeed;
+            if (backrolling)
+            {
+                velocity =  -playeranim.transform.forward * 8;
+                rigid.velocity = velocity;
+            }
+            else if ((playeranim.Equals(State.Attack)))
             {
                 rigid.velocity = velocity;
             }
             else if (x != 0 || z != 0)
             {
                 rigid.velocity = velocity;
+
+            }
+            else
+            {
+               
+                rigid.velocity = new Vector3(0, 0, 0);
 
             }
             Rotate();
@@ -324,7 +338,7 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        Vector2 input = context.ReadValue<Vector2>();
+        input = context.ReadValue<Vector2>();
         if (input != null) moveDirection = new Vector3(input.x, 0f, input.y);
     }
     public void OnLeftMouse(InputAction.CallbackContext context)
@@ -340,14 +354,22 @@ public class Player : MonoBehaviour
     public void OnRun(InputAction.CallbackContext context)
     {
         bool run = context.ReadValueAsButton();
-        if (playeranim && !playerstate.Equals(State.Death))
+        if (playeranim && !playerstate.Equals(State.Death) && !(input.x == 0 && input.y == 0))
         {
             playeranim.Run(run);
             if (run) moveSpeed = 10f;
             else moveSpeed = 4f;
         }
     }
+    public void OnRolling()
+    {
+        backrolling = true;
+    }
 
+    public void OffRolling()
+    {
+        backrolling = false;
+    }
     public void OnDesh(InputAction.CallbackContext context)
     {
         bool desh = context.ReadValueAsButton();
@@ -355,9 +377,16 @@ public class Player : MonoBehaviour
         {
             if (desh)
             {
-                playeranim.Dash();
-                AudioMgr.Instance.PlayAudio(rollingAudio); //구르기
-                //  playerstate = State.Desh;
+                if (!(input.x == 0 && input.y == 0))
+                {
+                    playeranim.Dash();
+                    AudioMgr.Instance.PlayAudio(rollingAudio); //구르기
+                                                               //  playerstate = State.Desh;
+                }
+                else
+                {
+                    playeranim. BackRoll();
+                }
             }
         }
 

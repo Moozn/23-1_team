@@ -33,7 +33,10 @@ public class PlayerAnim : MonoBehaviour
     {
         if (anim) anim.SetTrigger("Dash");
     }
-
+    public void BackRoll()
+    {
+        if (anim) anim.SetTrigger("BackRoll");
+    }
 
     public void Hit()
     {

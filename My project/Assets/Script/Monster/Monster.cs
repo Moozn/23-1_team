@@ -310,9 +310,9 @@ public class Monster : MonoBehaviour
         magicalCamp.On();
         magicalCircle.On();
         magical_Camp.Play();
-        AudioMgr.Instance.PlayAudio(magicalcreatAudio);
+    //  AudioMgr.Instance.PlayAudio(magicalcreatAudio);
         yield return new WaitForSeconds(1f);
-        AudioMgr.Instance.PlayAudio(roarAudio); //포효를 어디에 넣지 하다가 일단 생성 떨어지기 중간에 넣었음
+    //  AudioMgr.Instance.PlayAudio(roarAudio); //포효를 어디에 넣지 하다가 일단 생성 떨어지기 중간에 넣었음
         yield return new WaitForSeconds(1.5f);
         b_magical = false;
         magical_Camp.Stop();
@@ -322,7 +322,7 @@ public class Monster : MonoBehaviour
     private IEnumerator Magical()
     {
         magical.Play();
-        AudioMgr.Instance.PlayAudio(magicalAudio);
+      //  AudioMgr.Instance.PlayAudio(magicalAudio);
         yield return new WaitForSeconds(0.5f);
         magical.Stop();
         magicalCamp.Off();
