@@ -354,11 +354,14 @@ public class Player : MonoBehaviour
     public void OnRun(InputAction.CallbackContext context)
     {
         bool run = context.ReadValueAsButton();
-        if (playeranim && !playerstate.Equals(State.Death) && !(input.x == 0 && input.y == 0))
+        if (playeranim && !playerstate.Equals(State.Death))
         {
-            playeranim.Run(run);
-            if (run) moveSpeed = 10f;
-            else moveSpeed = 4f;
+            if (!((input.x == 0 && input.y == 0) && moveSpeed == 4))
+            {
+                playeranim.Run(run);
+                if (run) moveSpeed = 10f;
+                else moveSpeed = 4f;
+            }
         }
     }
     public void OnRolling()
