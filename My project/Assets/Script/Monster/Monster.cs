@@ -59,7 +59,11 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioSource magicalcreatAudio; // ∏∂π˝¡¯ ±Ú∏±∂ß
     [SerializeField] private AudioSource roarAudio; // ∆˜»ø
     [SerializeField] private AudioSource magicalAudio; // ∏∂π˝º“∏Æ 
-
+    private float swing1; //25
+    private float swing2; //25
+    private float breath_long; //10
+    private float breath_short;//25
+    private float f_magical;//5
     private bool b_magical;
     private void Init()
     {
@@ -87,7 +91,11 @@ public class Monster : MonoBehaviour
         stiffen = 100f;
         fly = false;
         falling = false;
-
+        swing1 = 20f;
+        swing2 = 40f;
+        breath_long = 60f;
+        breath_short = 80f;
+        f_magical = 100f;
         maicalTime = 1.5f;
         b_magical = false;
     }
@@ -224,23 +232,34 @@ public class Monster : MonoBehaviour
         {
             pattern_var++;
             Debug.Log(pattern_var % 4);
-            switch(pattern_var%4)
+            float random = Random.Range(1f, 101f);
+
+            if (swing1 >= random) pattern_var = 0;
+            else if (swing2 >= random) pattern_var = 1;
+            else if (breath_short >= random) pattern_var = 2;
+            else if (breath_long >= random) pattern_var = 3;
+            else if (f_magical >= random) pattern_var = 4;
+    
+            switch (pattern_var)
             {
                 case 0: //∆» »÷µŒ∏£±‚ 2
-                    attack2 = true;
                   //  StartCoroutine(Attack());
-                    StartCoroutine(MagicalCamp());
+                    StartCoroutine(Attack());
                     break;
                 case 1: //∆» »÷µŒ∏£±‚ 1
-                    attack2 = false;
                     //   StartCoroutine(Attack());
-                    StartCoroutine(MagicalCamp());
+                    attack2 = true;
+                    StartCoroutine(Attack());
                     break;
                 case 2: //∫Í∑πΩ∫ ±Ê∞‘
                         //  StartCoroutine(Breth_Long());
-                    StartCoroutine(MagicalCamp());
+                    StartCoroutine(Breth_Long());
                     break;
                 case 3:
+                    //  StartCoroutine(Breth_Short());
+                    StartCoroutine(Breth_Short());
+                    break;
+                case 4:
                     //  StartCoroutine(Breth_Short());
                     StartCoroutine(MagicalCamp());
                     break;
@@ -298,6 +317,7 @@ public class Monster : MonoBehaviour
         state = MonstrState.Attack;
         anim.SetTrigger("Attack2");
         AudioMgr.Instance.PlayAudio(swingAudio2);//Ω∫¿Æ2
+        attack2 = false;
 
     }
     private float distance()
