@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource swordAudio;//검소리
     [SerializeField] private AudioSource shieldAudio; //방패소리
     [SerializeField] private AudioSource rollingAudio; // 구르기
-    [SerializeField] private Transform camera;
+    [SerializeField] private ThirdPersonCamera camera;
     [SerializeField] private SetUI endUI;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
@@ -178,7 +178,7 @@ public class Player : MonoBehaviour
         if (moveDirection.magnitude > 0)
         {
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-            rotationAngle = targetAngle + camera.eulerAngles.y;
+            rotationAngle = targetAngle + camera.transform.eulerAngles.y;
         }
         else
         {
@@ -262,6 +262,7 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         timecheck = true;
+        camera.setcamera(true);
     }
     private IEnumerator Die() //정지시키고 뭐 해야할듯
     {
@@ -270,6 +271,7 @@ public class Player : MonoBehaviour
         playeranim.Die(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        camera.setcamera(false);
         yield return new WaitForSeconds(1.5f);
         timecheck = false;
         //   gameObject.SetActive(false);
@@ -311,7 +313,7 @@ public class Player : MonoBehaviour
     public void End()
     {
         endUI.On();
-
+        camera.setcamera(false);
         Cursor.lockState = CursorLockMode.None;
         timecheck = false;
         text.EndText(Player_Lv, playtime);

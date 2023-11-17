@@ -15,35 +15,44 @@ public class ThirdPersonCamera : MonoBehaviour
     private float currentDistance;
     private float rotationX = 0.0f;
     private float rotationY = 0.0f;
-
+    private bool camera;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor to the center of the screen
         Cursor.visible = false; // Hide the cursor
         currentDistance = (minDistance + maxDistance) / 2;
+        camera = true;
+    }
+
+    public void setcamera(bool b)
+    {
+        camera = b;
     }
 
     void Update()
     {
-        // Calculate camera rotation based on mouse input
-        rotationX += Input.GetAxis("Mouse X") * sensitivityX;
-        rotationY -= Input.GetAxis("Mouse Y") * sensitivityY;
-        rotationY = Mathf.Clamp(rotationY, minYAngle, maxYAngle);
+        if (camera)
+        {
+            // Calculate camera rotation based on mouse input
+            rotationX += Input.GetAxis("Mouse X") * sensitivityX;
+            rotationY -= Input.GetAxis("Mouse Y") * sensitivityY;
+            rotationY = Mathf.Clamp(rotationY, minYAngle, maxYAngle);
 
-        // Zoom in/out with the mouse scroll wheel
-        currentDistance -= Input.GetAxis("Mouse ScrollWheel");
-        currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
+            // Zoom in/out with the mouse scroll wheel
+            currentDistance -= Input.GetAxis("Mouse ScrollWheel");
+            currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
 
-        // Apply rotation to the camera
-        transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
+            // Apply rotation to the camera
+            transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
 
-        // Calculate desired camera position
-        Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
+            // Calculate desired camera position
+            Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
 
-        // Apply the position to the camera
-        transform.position = desiredPosition;
+            // Apply the position to the camera
+            transform.position = desiredPosition;
 
-        // Look at the target (the playable character)
-        transform.LookAt(target);
+            // Look at the target (the playable character)
+            transform.LookAt(target);
+        }
     }
 }
