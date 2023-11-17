@@ -34,7 +34,6 @@ public class Monster : MonoBehaviour
     private bool attack2;
     [SerializeField] private int pattern_var; //패턴 변수
     private NavMeshAgent agent;
-    private float dis_Pattern1, dis_Pattern2, dis_Pattern3; //패턴거리
     private float player_dis;
     [SerializeField] private GameObject bullet;
     private bool delay;
@@ -59,6 +58,11 @@ public class Monster : MonoBehaviour
     [SerializeField] private AudioSource magicalcreatAudio; // 마법진 깔릴때
     [SerializeField] private AudioSource roarAudio; // 포효
     [SerializeField] private AudioSource magicalAudio; // 마법소리 
+    [SerializeField] private SetUI longbreath;
+    [SerializeField] private SetUI Shortbreath;
+    [SerializeField] private ParticleTrigger ptbreath_long;
+    [SerializeField] private ParticleTrigger ptbreath_Short;
+    [SerializeField] private ParticleTrigger ptmagical;
     private float swing1; //25
     private float swing2; //25
     private float breath_long; //10
@@ -78,9 +82,9 @@ public class Monster : MonoBehaviour
         attack2 = false;
         min = 0;
         max = 0;
-        dis_Pattern1 = 30f;
-        dis_Pattern2 = 10f;
-        dis_Pattern3 = 5f;
+        ptbreath_long.SetDamage(10); //긴 브레스
+        ptbreath_Short.SetDamage(10); //찗은 브레스
+        ptmagical.SetDamage(10); //스킬 데미지
         stemina = 100f;
         cooltime = 3f;
         pattern_var = 1;
@@ -115,19 +119,6 @@ public class Monster : MonoBehaviour
     {
         SetExp();
     }
-    public void Fire() //부채꼴 발사
-    {
-        float angle = 45;
-        int bulletnum = 10;
-        float angleIncrement = angle / (bulletnum - 1);
-
-        for (int i = 0; i < bulletnum; i++)
-        {
-            float currentAngle = -angle / 2f + i * angleIncrement;
-            GameObject _bullet = Instantiate(bullet, transform.position, Quaternion.identity);
-            _bullet.transform.forward = Quaternion.Euler(0f, currentAngle, 0f) * transform.forward;
-        }
-    }
     private void OnTriggerEnter(Collider other) //돌진
     {
     }
@@ -135,12 +126,17 @@ public class Monster : MonoBehaviour
     {
         if (!state.Equals(MonstrState.Hit))
         {
-            state = MonstrState.Hit;
-            set_hitEffect.On();
-            hitEffect.Play();
-            StartCoroutine(Timer());
             Mob_Hp -= Damage;
-            stiffen -= 5f;
+            if (Mob_Hp > 0)
+            {
+                state = MonstrState.Hit;
+                set_hitEffect.On();
+                hitEffect.Play();
+                StartCoroutine(Timer());
+                Mob_Hp -= Damage;
+                stiffen -= 5f;
+            }
+            else StartCoroutine(Die());
         }
         
     }
@@ -151,11 +147,31 @@ public class Monster : MonoBehaviour
         agent.SetDestination(player.transform.position);
     } //쫓기
 
-    private void Die()
+    private IEnumerator Die()
     {
-        //if (capsuleCollider) capsuleCollider.enabled = false;
-        MonsterSpawner.Instance.InsertList(this);
+        Mob_Hp = 0f;
+        state = MonstrState.Death;
+        anim.SetBool("Die", true);
+        yield return new WaitForSeconds(2f);
+        Cursor.visible = true;
+        player.End();
+        Deactivation();
+        //MonsterSpawner.Instance.InsertList(this);
     }
+    public void OnAttack()
+    {
+        state = MonstrState.Attack;
+    }
+    public void OffAttack()
+    {
+        state = MonstrState.Idle;
+    }
+
+   // private void Die()
+   // {
+   //     //if (capsuleCollider) capsuleCollider.enabled = false;
+   //     MonsterSpawner.Instance.InsertList(this);
+   // }
     private void SetExp()
     {
         Mob_Exp = (Mob_HpMax - Mob_Hp) * 2;
@@ -187,7 +203,7 @@ public class Monster : MonoBehaviour
    private void Update()
    {
        hpsilder.Slider_Update(Mob_Hp / Mob_HpMax);
-        if (stemina >= 30) ; //Exploration();
+       // if (stemina >= 30) ; //Exploration();
         if (fly)
         {
             // transform.Translate(Vector3.up * 10000f * Time.deltaTime);
@@ -240,7 +256,7 @@ public class Monster : MonoBehaviour
             else if (breath_long >= random) pattern_var = 3;
             else if (f_magical >= random) pattern_var = 4;
     
-            switch (pattern_var)
+            switch (4)//pattern_var)
             {
                 case 0: //팔 휘두르기 2
                   //  StartCoroutine(Attack());
@@ -298,25 +314,22 @@ public class Monster : MonoBehaviour
 
     IEnumerator Attack()
     {
-        state = MonstrState.Attack;
         anim.SetTrigger("Attack");
-        AudioMgr.Instance.PlayAudio(swingAudio1); //스윙1
-        yield return new WaitForSeconds(2f);
+      //  AudioMgr.Instance.PlayAudio(swingAudio1); //스윙1
+        yield return new WaitForSeconds(1.2f);
         if (attack2)
         {
             Attack2();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.2f);
         }
         cooltime = 3f;
         yield return new WaitForSeconds(1.5f);
-        state = MonstrState.Idle;
         StartCoroutine(Pattern());
     }
     public void Attack2()
     {
-        state = MonstrState.Attack;
         anim.SetTrigger("Attack2");
-        AudioMgr.Instance.PlayAudio(swingAudio2);//스윙2
+    //    AudioMgr.Instance.PlayAudio(swingAudio2);//스윙2
         attack2 = false;
 
     }
@@ -343,29 +356,48 @@ public class Monster : MonoBehaviour
     {
         magical.Play();
       //  AudioMgr.Instance.PlayAudio(magicalAudio);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         magical.Stop();
         magicalCamp.Off();
         StartCoroutine(Pattern());
     }
+    public void OnBreth()
+    {
+        longbreath.On();
+        breath.Play();
+    }
+    public void OffBreth()
+    {
+        breath.Stop();
+        longbreath.Off();
+    }
+
+    public void OnBreth_Short()
+    {
+        Shortbreath.On();
+        breath_2.Play();
+    }
+    public void OffBreth_Short()
+    {
+        breath_2.Stop();
+        Shortbreath.Off();
+    }
     IEnumerator Breth_Long()
     {
-        AudioMgr.Instance.PlayAudio(breath_Audio1);
+      //  AudioMgr.Instance.PlayAudio(breath_Audio1);
         anim.SetTrigger("Breth_Long");
-        breath.Play();
         yield return new WaitForSeconds(3.6f);
-        //AudioMgr.Instance.PlayAudioStop (breath_Audio1);
-        breath.Stop();
+        //AudioMgr.Instance.PlayAudioStop (breath_Audio1);  
         cooltime = 3f;
         StartCoroutine(Pattern());
     }
     IEnumerator Breth_Short()
     {
         anim.SetTrigger("Breth_Short");
-        AudioMgr.Instance.PlayAudio(breath_Audio2);
-        breath_2.Play(); //브레스 짧은거
+       // AudioMgr.Instance.PlayAudio(breath_Audio2);
+       // breath_2.Play(); //브레스 짧은거
         yield return new WaitForSeconds(2f);
-        breath_2.Stop();
+  //      breath_2.Stop();
         // AudioMgr.Instance.PlayAudioStop(breath_Audio1);
         cooltime = 2f;
         StartCoroutine(Pattern());

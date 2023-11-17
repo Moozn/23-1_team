@@ -44,13 +44,19 @@ public class AudioMgr : MonoBehaviour
     }
     public void PlayAudio(AudioSource audio)
     {
-        audio.volume = volume;
-        audio.Play();
+        if (audio != null)
+        {
+            audio.volume = volume;
+            audio.Play();
+        }
     }
 
     public void PlayAudioStop(AudioSource audio)
     {
-        audio.volume = volume;
-        audio.Stop();
+        if (audio != null)
+        {
+            audio.volume = volume;
+            audio.Stop();
+        }
     }
 }

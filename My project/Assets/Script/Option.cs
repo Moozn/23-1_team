@@ -8,14 +8,20 @@ public class Option : MonoBehaviour
     [SerializeField] private Slider soundeffectslider;
     [SerializeField] private Slider bgmslider;
     private bool optionsWindow;
+    private bool resetButton;
     private void Start()
     {
+        resetButton = false;
         bgmslider.value = 1f;
         soundeffectslider.value = 1f;
         optionsWindow = false;
         optionUi.Off();
     }
 
+    public void OnReSet()
+    {
+        resetButton = true;
+    }
     public void OnClick()
     {
         optionUi.On();

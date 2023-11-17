@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource shieldAudio; //방패소리
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private Transform camera;
+    [SerializeField] private SetUI endUI;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
     private Rigidbody rigid;
@@ -71,8 +72,11 @@ public class Player : MonoBehaviour
     private float MpRecoverytime; //마나회복 시간 ex)1초마다
     private Vector2 input;
     private bool isDead => (0 >= Player_Hp); // 죽음 상태 확인
+    private float playtime;
+    private bool timecheck;
     public void Initialize()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         moveSpeed = 4f;
         Player_Lv = 1;
@@ -94,6 +98,8 @@ public class Player : MonoBehaviour
         Stat_CalculationFormula(1);
         Stat_CalculationFormula(2);
         Stat_CalculationFormula(3);
+        playtime = 0f;
+        timecheck = true;
     }
     public void Add_Exp(float Exp)
     {
@@ -163,6 +169,7 @@ public class Player : MonoBehaviour
         playeranim = GetComponent<PlayerAnim>();
         rigid = GetComponent<Rigidbody>();
         Initialize();
+        playtime = 0f;
     }
     private void Rotate()
     {
@@ -251,19 +258,23 @@ public class Player : MonoBehaviour
     public void restart()
     {
         playerstate = State.Idle;
+        playeranim.Die(false);
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        timecheck = true;
     }
     private IEnumerator Die() //정지시키고 뭐 해야할듯
     {
         //if(playerstate.Equals(State.Death)) playeranim.Die();
         playerstate = State.Death;
         playeranim.Die(true);
-
-        yield return new WaitForSeconds(1f);
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        yield return new WaitForSeconds(1.5f);
+        timecheck = false;
         //   gameObject.SetActive(false);
         MaxHPMP();
-        playeranim.Die(false);
+       
         monster.Deactivation();
         infoUi.On();
     }
@@ -282,7 +293,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-
+        if (timecheck) playtime += Time.deltaTime;
         hp_slider.Slider_Update(Player_Hp / max_Hp);
         mp_slider.Slider_Update(Player_Mp / max_mp);
         text.statText(Player_Lv, Player_CurExp, m_playerStat);
@@ -296,6 +307,14 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(Die());
         }
+    }
+    public void End()
+    {
+        endUI.On();
+
+        Cursor.lockState = CursorLockMode.None;
+        timecheck = false;
+        text.EndText(Player_Lv, playtime);
     }
     IEnumerator SwordColliderMaintain() // 콜라이더 유지시간
     {
@@ -320,12 +339,12 @@ public class Player : MonoBehaviour
     }
     public void OnEffect(int Combo)
     {
-        swordEffect.On();
-     if(Combo != 2)   ps[Combo].Play();
+    //    swordEffect.On();
+   //  if(Combo != 2)   ps[Combo].Play();
     }
     public void OffEffect(int Combo)
     {
-        ps[Combo].Stop();
+     //   ps[Combo].Stop();
       //  swordEffect.Off();
     }
     private IEnumerator AttackEffect(int Combo)

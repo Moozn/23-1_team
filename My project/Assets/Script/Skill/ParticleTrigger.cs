@@ -9,16 +9,13 @@ public class ParticleTrigger : MonoBehaviour
     {
         damage = _damage;
     }
-    private void OnParticleTrigger()
-    {
-        Debug.Log("맞음");
-    }
 
     private void OnParticleCollision(GameObject other)
     {
-        if (other.tag == "Monster")
+        if (other.tag == "Player")
         {
-            other.GetComponent<Monster>().Hit(damage);      
+            Debug.Log("맞음");
+            other.GetComponent<Player>().Hit(damage);      
         }
     }
 }

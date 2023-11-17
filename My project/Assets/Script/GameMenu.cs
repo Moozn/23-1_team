@@ -20,7 +20,10 @@ public class GameMenu : MonoBehaviour
     {
         menu.Off();
     }
-
+    public void InGame()
+    {
+        GameMgr.Instance.SceneChange(0);
+    }
     public void OnGameExitClick()
     {
         // Application.Quit();

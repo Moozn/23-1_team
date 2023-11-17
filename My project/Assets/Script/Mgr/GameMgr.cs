@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameMgr : MonoBehaviour
 {
     public static GameMgr instance = null;
+
     public static GameMgr Instance
     {
         get
