@@ -127,6 +127,7 @@ public class Monster : MonoBehaviour
         if (!state.Equals(MonstrState.Hit))
         {
             Mob_Hp -= Damage;
+            AudioMgr.Instance.PlayAudio(hitAudio);
             if (Mob_Hp > 0)
             {
                 state = MonstrState.Hit;
@@ -315,7 +316,7 @@ public class Monster : MonoBehaviour
     IEnumerator Attack()
     {
         anim.SetTrigger("Attack");
-      //  AudioMgr.Instance.PlayAudio(swingAudio1); //스윙1
+        AudioMgr.Instance.PlayAudio(swingAudio1); //스윙1
         yield return new WaitForSeconds(1.2f);
         if (attack2)
         {
@@ -329,7 +330,7 @@ public class Monster : MonoBehaviour
     public void Attack2()
     {
         anim.SetTrigger("Attack2");
-    //    AudioMgr.Instance.PlayAudio(swingAudio2);//스윙2
+        AudioMgr.Instance.PlayAudio(swingAudio2);//스윙2
         attack2 = false;
 
     }
@@ -343,19 +344,20 @@ public class Monster : MonoBehaviour
         magicalCamp.On();
         magicalCircle.On();
         magical_Camp.Play();
-    //  AudioMgr.Instance.PlayAudio(magicalcreatAudio);
+        AudioMgr.Instance.PlayAudio(magicalcreatAudio);
         yield return new WaitForSeconds(1f);
-    //  AudioMgr.Instance.PlayAudio(roarAudio); //포효를 어디에 넣지 하다가 일단 생성 떨어지기 중간에 넣었음
+        AudioMgr.Instance.PlayAudio(roarAudio); //포효를 어디에 넣지 하다가 일단 생성 떨어지기 중간에 넣었음
         yield return new WaitForSeconds(1.5f);
         b_magical = false;
         magical_Camp.Stop();
+        yield return new WaitForSeconds(0.5f);
         magicalCircle.Off();
         StartCoroutine(Magical());
     }
     private IEnumerator Magical()
     {
         magical.Play();
-      //  AudioMgr.Instance.PlayAudio(magicalAudio);
+        AudioMgr.Instance.PlayAudio(magicalAudio);
         yield return new WaitForSeconds(1f);
         magical.Stop();
         magicalCamp.Off();
@@ -384,21 +386,21 @@ public class Monster : MonoBehaviour
     }
     IEnumerator Breth_Long()
     {
-      //  AudioMgr.Instance.PlayAudio(breath_Audio1);
+        AudioMgr.Instance.PlayAudio(breath_Audio1);
         anim.SetTrigger("Breth_Long");
         yield return new WaitForSeconds(3.6f);
-        //AudioMgr.Instance.PlayAudioStop (breath_Audio1);  
+        AudioMgr.Instance.PlayAudioStop (breath_Audio1);  
         cooltime = 3f;
         StartCoroutine(Pattern());
     }
     IEnumerator Breth_Short()
     {
         anim.SetTrigger("Breth_Short");
-       // AudioMgr.Instance.PlayAudio(breath_Audio2);
-       // breath_2.Play(); //브레스 짧은거
-        yield return new WaitForSeconds(2f);
-  //      breath_2.Stop();
-        // AudioMgr.Instance.PlayAudioStop(breath_Audio1);
+        AudioMgr.Instance.PlayAudio(breath_Audio2);
+        breath_2.Play(); //브레스 짧은거
+        yield return new WaitForSeconds(1f);
+        breath_2.Stop();
+         AudioMgr.Instance.PlayAudioStop(breath_Audio1);
         cooltime = 2f;
         StartCoroutine(Pattern());
     }
