@@ -43,16 +43,16 @@ public class ThirdPersonCamera : MonoBehaviour
             currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
 
             // Apply rotation to the camera
-            transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
-
+            //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
+            target.rotation = Quaternion.Euler(rotationY, rotationX, 0);
             // Calculate desired camera position
-            Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
+            //   Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
 
             // Apply the position to the camera
-            transform.position = desiredPosition;
-
+            //transform.position = desiredPosition;
+           
             // Look at the target (the playable character)
-            transform.LookAt(target);
+            //transform.LookAt(target);
         }
     }
 }

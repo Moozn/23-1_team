@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource shieldAudio; //방패소리
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private ThirdPersonCamera camera;
+    [SerializeField] private Transform maincamera;
     [SerializeField] private SetUI endUI;
     [SerializeField] private SetUI expUI;
     private Vector3 moveDirection; //이동방향
@@ -182,7 +183,7 @@ public class Player : MonoBehaviour
         if (moveDirection.magnitude > 0)
         {
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-            rotationAngle = targetAngle + camera.transform.eulerAngles.y;
+            rotationAngle = targetAngle + maincamera.transform.eulerAngles.y;//camera.transform.eulerAngles.y;
         }
         else
         {
