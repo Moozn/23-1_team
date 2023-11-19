@@ -34,7 +34,7 @@ public class TextUi : MonoBehaviour
 
     public void  Exp(float curexp, float totalexp)//float nextexp,float damage, float Df, float vgr, float mnt)
     {
-        cur_Exp.text = "현재레벨 : " + curexp.ToString("N1");
+        cur_Exp.text = "총 경험치 : " + curexp.ToString("N1");
         total_Exp.text = "소지 경험치 : " + totalexp.ToString("N1");
     }
 }

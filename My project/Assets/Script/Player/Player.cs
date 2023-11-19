@@ -289,13 +289,14 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         camera.setcamera(false);
-        text.Exp(Player_CurExp, totalEXP);
+        
         yield return new WaitForSeconds(1.5f);
         timecheck = false;
         //   gameObject.SetActive(false);
         MaxHPMP();
        
         monster.Deactivation();
+        text.Exp(Player_CurExp, totalEXP);
         // infoUi.On();
         expUI.On();
     }
