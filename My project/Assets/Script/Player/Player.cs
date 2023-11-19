@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private ThirdPersonCamera camera;
     [SerializeField] private SetUI endUI;
+    [SerializeField] private SetUI expUI;
     private Vector3 moveDirection; //이동방향
     private float moveSpeed; //이동속도
     private Rigidbody rigid;
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
     private bool isDead => (0 >= Player_Hp); // 죽음 상태 확인
     private float playtime;
     private bool timecheck;
+    private float totalEXP;
     public void Initialize()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -100,10 +102,12 @@ public class Player : MonoBehaviour
         Stat_CalculationFormula(3);
         playtime = 0f;
         timecheck = true;
+        totalEXP = 0f;
     }
     public void Add_Exp(float Exp)
     {
         Player_CurExp += Exp; //플레이어가 죽을때 몬스터에서 exp들고옴
+        totalEXP += Exp;
     }
     public void Add_Stat(int select)
     {
@@ -255,6 +259,10 @@ public class Player : MonoBehaviour
             Rotate();
         }
     }
+    public void OffEXP()
+    {
+        expUI.Off();
+    }
     public void restart()
     {
         playerstate = State.Idle;
@@ -264,6 +272,15 @@ public class Player : MonoBehaviour
         timecheck = true;
         camera.setcamera(true);
     }
+    public void Oninfo()
+    {
+        infoUi.On();
+    }
+
+    public void OffIinfo()
+    {
+        infoUi.Off();
+    }
     private IEnumerator Die() //정지시키고 뭐 해야할듯
     {
         //if(playerstate.Equals(State.Death)) playeranim.Die();
@@ -272,13 +289,15 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         camera.setcamera(false);
+        text.Exp(Player_CurExp, totalEXP);
         yield return new WaitForSeconds(1.5f);
         timecheck = false;
         //   gameObject.SetActive(false);
         MaxHPMP();
        
         monster.Deactivation();
-        infoUi.On();
+        // infoUi.On();
+        expUI.On();
     }
     private void MaxHPMP()
     {

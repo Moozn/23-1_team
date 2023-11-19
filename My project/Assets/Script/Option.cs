@@ -18,6 +18,7 @@ public class Option : MonoBehaviour
         optionUi.Off();
     }
 
+
     public void OnReSet()
     {
         resetButton = true;

@@ -84,7 +84,7 @@ public class Monster : MonoBehaviour
         max = 0;
         ptbreath_long.SetDamage(10); //긴 브레스
         ptbreath_Short.SetDamage(10); //찗은 브레스
-        ptmagical.SetDamage(10); //스킬 데미지
+        ptmagical.SetDamage(1000); //스킬 데미지
         stemina = 100f;
         cooltime = 3f;
         pattern_var = 1;
