@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private ThirdPersonCamera camera;
     [SerializeField] private Transform maincamera;
+    [SerializeField] private Transform root;
     [SerializeField] private SetUI endUI;
     [SerializeField] private SetUI expUI;
     private Vector3 moveDirection; //이동방향
@@ -236,7 +237,10 @@ public class Player : MonoBehaviour
             float x = moveDirection.x, z = moveDirection.z;
             if (moveDirection.x != 0) playeranim.Move(moveDirection.x);
             else playeranim.Move(moveDirection.z);
-            Vector3 velocity = new Vector3(x, 0, z)  +playeranim.transform.forward * moveSpeed;
+            Vector3 velocity = playeranim.forward() * moveSpeed;//playeranim.transform.forward.normalized * moveSpeed;//playeranim.transform.forward * moveSpeed;
+            
+
+            Debug.Log(moveDirection);
             if (backrolling)
             {
                 velocity =  -playeranim.transform.forward * 8;
@@ -249,13 +253,13 @@ public class Player : MonoBehaviour
             else if (x != 0 || z != 0)
             {
                 rigid.velocity = velocity;
-
+           
             }
             else
             {
                
                 rigid.velocity = new Vector3(0, 0, 0);
-
+           
             }
             Rotate();
         }

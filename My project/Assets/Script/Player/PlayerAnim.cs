@@ -9,8 +9,15 @@ public class PlayerAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();    
     }
- //   private StateMachineExample _stateMachineExample;
+    //   private StateMachineExample _stateMachineExample;
 
+    public Vector3 forward()
+    {
+        Debug.Log(anim.transform.forward.normalized);
+        if (Mathf.Abs(anim.transform.forward.x) <= 0.1f) return new Vector3(0, 0, anim.transform.forward.normalized.z);
+        else if (Mathf.Abs(anim.transform.forward.z) <= 0.1f) return new Vector3(anim.transform.forward.x, 0, 0);
+        return anim.transform.forward.normalized;
+    }
     void Start()
     {
         //_stateMachineExample = _animator.GetBehaviour<StateMachineExample>();
