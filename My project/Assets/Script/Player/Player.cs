@@ -141,15 +141,15 @@ public class Player : MonoBehaviour
         switch (select)
         {
             case 1:
-                Player_Hp = 80 + (m_playerStat.vgr * 5);
+                Player_Hp = 200 + (m_playerStat.vgr * 7);
                 max_Hp = Player_Hp;
                 break;
             case 2:
-                Player_Atk = 100 + (m_playerStat.str * 11.5f);
+                Player_Atk = 50 + (m_playerStat.str * 11.5f);
                 sword.Set_Damage(Player_Atk);
                 break;
             case 3:
-                Player_Def = 10 + (m_playerStat.ind * 0.3f);
+                Player_Def = 20 + (m_playerStat.ind * 0.5f);
                 break;
             case 4:
                 Player_Mp += 10 + m_playerStat.mnt * 0.5f;

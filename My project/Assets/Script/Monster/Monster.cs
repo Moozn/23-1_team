@@ -153,6 +153,7 @@ public class Monster : MonoBehaviour
         Mob_Hp = 0f;
         state = MonstrState.Death;
         anim.SetBool("Die", true);
+        AudioMgr.Instance.PlayAudio(dieAudio);
         yield return new WaitForSeconds(2f);
         Cursor.visible = true;
         player.End();
@@ -257,7 +258,7 @@ public class Monster : MonoBehaviour
             else if (breath_long >= random) pattern_var = 3;
             else if (f_magical >= random) pattern_var = 4;
     
-            switch (4)//pattern_var)
+            switch (pattern_var)
             {
                 case 0: //∆» »÷µŒ∏£±‚ 2
                   //  StartCoroutine(Attack());
