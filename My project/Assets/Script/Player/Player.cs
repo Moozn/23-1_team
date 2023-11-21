@@ -367,11 +367,11 @@ public class Player : MonoBehaviour
     public void OnEffect(int Combo)
     {
         swordEffect.On();
-     if(Combo != 2)   ps[Combo].Play();
+        ps[Combo].Play();
     }
     public void OffEffect(int Combo)
     {
-        if (Combo != 2) ps[Combo].Stop();
+        ps[Combo].Stop();
         swordEffect.Off();
     }
     public void Onrolling()
