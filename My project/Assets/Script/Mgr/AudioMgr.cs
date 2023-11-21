@@ -7,11 +7,11 @@ public class AudioMgr : MonoBehaviour
     public static AudioMgr instance = null;
     private float volume;
     private float bgm;
-    private AudioSource backgroundAudio;
+    //[SerializeField] private AudioSource backgroundAudio;
     private void Awake()
     {
         if (this != Instance) Destroy(gameObject);
-        backgroundAudio = GetComponent<AudioSource>();
+        //backgroundAudio = GetComponent<AudioSource>();
     }
     public static AudioMgr Instance
     {
@@ -31,6 +31,7 @@ public class AudioMgr : MonoBehaviour
     void Initialize()
     {
         volume = 1;
+    //    backgroundAudio.Play();
     }
     public void VolumeUpdate(float _volume, float _bgm) //º¼·ý Á¶Àý
     {

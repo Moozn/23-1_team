@@ -63,6 +63,9 @@ public class Monster : MonoBehaviour
     [SerializeField] private ParticleTrigger ptbreath_long;
     [SerializeField] private ParticleTrigger ptbreath_Short;
     [SerializeField] private ParticleTrigger ptmagical;
+    [SerializeField] private weapon[] claw_R = new weapon[3];
+    [SerializeField] private weapon[] claW_L = new weapon[3];
+    [SerializeField] private Transform respawn;
     private float swing1; //25
     private float swing2; //25
     private float breath_long; //10
@@ -82,9 +85,16 @@ public class Monster : MonoBehaviour
         attack2 = false;
         min = 0;
         max = 0;
-        ptbreath_long.SetDamage(10); //긴 브레스
-        ptbreath_Short.SetDamage(10); //찗은 브레스
-        ptmagical.SetDamage(10); //스킬 데미지
+        Mob_Atk = 30f;
+        ptbreath_long.SetDamage(Mob_Atk * 1f); //긴 브레스
+        ptbreath_Short.SetDamage(Mob_Atk * 1f); //찗은 브레스
+        ptmagical.SetDamage(Mob_Atk * 0.5f); //스킬 데미지
+        claw_R[0].Set_Damage(Mob_Atk);
+        claW_L[0].Set_Damage(Mob_Atk);
+        claw_R[1].Set_Damage(Mob_Atk);
+        claW_L[1].Set_Damage(Mob_Atk);
+        claw_R[2].Set_Damage(Mob_Atk);
+        claW_L[2].Set_Damage(Mob_Atk);
         stemina = 100f;
         cooltime = 3f;
         pattern_var = 1;
@@ -102,6 +112,7 @@ public class Monster : MonoBehaviour
         f_magical = 100f;
         maicalTime = 1.5f;
         b_magical = false;
+        transform.position = respawn.transform.position;
     }
     private void Awake()
     {
@@ -146,6 +157,7 @@ public class Monster : MonoBehaviour
         agent.isStopped = false;
         anim.SetFloat("Run", 1);
         agent.SetDestination(player.transform.position);
+       // rigid.velocity = (transform.position - player.transform.position).normalized * 100;//* Time.deltaTime * 100;
     } //쫓기
 
     private IEnumerator Die()
@@ -203,6 +215,7 @@ public class Monster : MonoBehaviour
     }
    private void Update()
    {
+        //Move();
        hpsilder.Slider_Update(Mob_Hp / Mob_HpMax);
        // if (stemina >= 30) ; //Exploration();
         if (fly)
@@ -224,9 +237,9 @@ public class Monster : MonoBehaviour
        {
            rigid.AddForce(transform.forward * 500);
        }
-       if (state.Equals(MonstrState.Run)) Move();
+    //   if (state.Equals(MonstrState.Run)) Move();
        Lookat();
-        //  else StartCoroutine(MoveStop());
+    //    else StartCoroutine(MoveStop());
       if(b_magical) magicalCamp.SetPosition(new Vector3(player.transform.position.x, 0.2f, player.transform.position.z));//player.transform.position);
 
 
@@ -242,29 +255,42 @@ public class Monster : MonoBehaviour
     private IEnumerator Pattern()
     {
         
-        yield return new WaitForSeconds(cooltime);
-      
+        yield return new WaitForSeconds(2f);
+        int random;
         if (distance() >= 10) StartCoroutine(Movement());
         else
         {
-            pattern_var++;
-            Debug.Log(pattern_var % 4);
-            float random = Random.Range(1f, 101f);
+            agent.isStopped = true;
+            if (distance() >= 5)
+            {
+                random = Random.Range(2, 5);
+                pattern_var = random;
+                //  if (swing1 >= random) pattern_var = 0;
+                //  else if (swing2 >= random) pattern_var = 1;
+                //  else if (breath_short >= random) pattern_var = 2;
+                //  else if (breath_long >= random) pattern_var = 3;
+                //  else if (f_magical >= random) pattern_var = 4;
+            }
+            else
+            {
+                random = Random.Range(0, 2);
+                pattern_var = random;
+                // if (swing1 >= random) pattern_var = 0;
+                // else if (swing2 >= random) pattern_var = 1;
+                // else if (breath_short >= random) pattern_var = 2;
+                // else if (breath_long >= random) pattern_var = 3;
+                // else if (f_magical >= random) pattern_var = 4;
+                //
 
-            if (swing1 >= random) pattern_var = 0;
-            else if (swing2 >= random) pattern_var = 1;
-            else if (breath_short >= random) pattern_var = 2;
-            else if (breath_long >= random) pattern_var = 3;
-            else if (f_magical >= random) pattern_var = 4;
-    
-            switch (4)//pattern_var)
+            }
+            switch (pattern_var)//pattern_var)
             {
                 case 0: //팔 휘두르기 2
-                  //  StartCoroutine(Attack());
+                        //  StartCoroutine(Attack());
                     StartCoroutine(Attack());
                     break;
                 case 1: //팔 휘두르기 1
-                    //   StartCoroutine(Attack());
+                        //   StartCoroutine(Attack());
                     attack2 = true;
                     StartCoroutine(Attack());
                     break;
@@ -309,7 +335,7 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(3f);
         falling = false;
         anim.SetBool("Falling", falling);
-        cooltime = 2f;
+     //   cooltime = 2f;
         StartCoroutine(Pattern());
     }
 
@@ -323,7 +349,7 @@ public class Monster : MonoBehaviour
             Attack2();
             yield return new WaitForSeconds(1.2f);
         }
-        cooltime = 3f;
+      //  cooltime = 3f;
         yield return new WaitForSeconds(1.5f);
         StartCoroutine(Pattern());
     }
@@ -390,7 +416,7 @@ public class Monster : MonoBehaviour
         anim.SetTrigger("Breth_Long");
         yield return new WaitForSeconds(3.6f);
         AudioMgr.Instance.PlayAudioStop (breath_Audio1);  
-        cooltime = 3f;
+       // cooltime = 3f;
         StartCoroutine(Pattern());
     }
     IEnumerator Breth_Short()
@@ -401,7 +427,7 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(1f);
         breath_2.Stop();
          AudioMgr.Instance.PlayAudioStop(breath_Audio1);
-        cooltime = 2f;
+       // cooltime = 2f;
         StartCoroutine(Pattern());
     }
 }

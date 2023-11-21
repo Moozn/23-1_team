@@ -18,12 +18,12 @@ public class TextUi : MonoBehaviour
     public void statText(float lv, float curexp, PlayerStat Stat)//float nextexp,float damage, float Df, float vgr, float mnt)
     {
         player_Lv.text = "현재레벨 : " + lv;
-        player_CurExp.text = "소지 경험치 : " + curexp.ToString("N1");
-        player_NextExp.text = "필요 경험치 : " + Stat.NextExp.ToString("N1");
+        player_CurExp.text = "소지 경험치 : " + curexp.ToString("N0");
+        player_NextExp.text = "필요 경험치 : " + Stat.NextExp.ToString("N0");
         player_Vgr.text = "생명력 : " + Stat.vgr;
-        Player_Mnt.text = "정신력 : " + Stat.mnt.ToString("N1");
-        player_Atk.text = "공격력 : " + Stat.str.ToString("N1");
-        player_Def.text = "방어력 : " + Stat.ind.ToString("N1");
+        Player_Mnt.text = "정신력 : " + Stat.mnt.ToString("N0");
+        player_Atk.text = "공격력 : " + Stat.str.ToString("N0");
+        player_Def.text = "방어력 : " + Stat.ind.ToString("N0");
     }
 
     public void EndText(float lv, float time)
@@ -34,7 +34,7 @@ public class TextUi : MonoBehaviour
 
     public void  Exp(float curexp, float totalexp)//float nextexp,float damage, float Df, float vgr, float mnt)
     {
-        cur_Exp.text = "총 경험치 : " + curexp.ToString("N1");
-        total_Exp.text = "소지 경험치 : " + totalexp.ToString("N1");
+        cur_Exp.text = "총 경험치 : " + curexp.ToString("N0");
+        total_Exp.text = "소지 경험치 : " + totalexp.ToString("N0");
     }
 }

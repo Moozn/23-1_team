@@ -11,9 +11,6 @@ public class ThirdPersonCamera : MonoBehaviour
     public float sensitivityY = 2.0f; // Y-axis rotation sensitivity
     public float minYAngle = -30.0f; // Minimum Y-axis rotation angle
     public float maxYAngle = 80.0f; // Maximum Y-axis rotation angle
-    public LayerMask collisionLayer; // Set the layers that the camera should collide with
-    public float collisionRadius = 0.3f; // Adjust the collision radius
-    public float collisionOffset = 0.2f; // Adjust the offset to prevent clipping
     private float currentDistance;
     private float rotationX = 0.0f;
     private float rotationY = 0.0f;
@@ -32,28 +29,7 @@ public class ThirdPersonCamera : MonoBehaviour
     }
 
 
-  
-
-    void HandleCameraCollision()
-    {
-        RaycastHit hit;
-        Vector3 desiredPosition = transform.position;
-
-        // Cast a ray from the camera to its desired position
-        if (Physics.SphereCast(transform.position, collisionRadius, transform.forward, out hit, Mathf.Infinity, collisionLayer))
-        {
-            // Adjust the camera position based on the hit point and collision offset
-            desiredPosition = hit.point - transform.forward * collisionOffset;
-        }
-
-        // Smoothly move the camera to the desired position
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10f);
-    }
-
-    void LateUpdate()
-    {
-        //HandleCameraCollision();
-    }
+ 
     void Update()
     {
         if (camera)
@@ -68,16 +44,16 @@ public class ThirdPersonCamera : MonoBehaviour
             currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
 
             // Apply rotation to the camera
-            //transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
+            transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
             target.rotation = Quaternion.Euler(rotationY, rotationX, 0);
             // Calculate desired camera position
-            //   Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
+            Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
 
             // Apply the position to the camera
-            //transform.position = desiredPosition;
+            transform.position = desiredPosition;
            
             // Look at the target (the playable character)
-            //transform.LookAt(target);
+            transform.LookAt(target);
         }
     }
 }

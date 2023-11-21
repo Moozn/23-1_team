@@ -15,13 +15,13 @@ public class weapon : MonoBehaviour
         if (other.tag.Equals("Monster") && !this.tag.Equals(other.tag))
         {
             //   other.GetComponentInParent<Monster>().Hit(damage);
-            other.GetComponentInParent<Monster>().Hit(1000);
+            other.GetComponentInParent<Monster>().Hit(damage);
             //  other.GetComponentInParent<HitEffect>().ShowHitEffect();
         }
         else if (other.tag.Equals("Player") && this.GetComponentInParent<Monster>().isAttack())
         {
             //other.GetComponent<Player>().Hit(damage);
-            other.GetComponent<Player>().Hit(10000);
+            other.GetComponent<Player>().Hit(damage);
         }
     }
     

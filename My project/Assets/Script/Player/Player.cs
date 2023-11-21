@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private ThirdPersonCamera camera;
     [SerializeField] private Transform maincamera;
+    [SerializeField] private Transform respawn;
     [SerializeField] private SetUI endUI;
     [SerializeField] private SetUI expUI;
     private Vector3 moveDirection; //이동방향
@@ -270,6 +271,7 @@ public class Player : MonoBehaviour
     }
     public void restart()
     {
+        transform.position = respawn.transform.position;
         playerstate = State.Idle;
         playeranim.Die(false);
         Cursor.lockState = CursorLockMode.Locked;
@@ -279,6 +281,7 @@ public class Player : MonoBehaviour
     }
     public void Oninfo()
     {
+        expUI.Off();
         infoUi.On();
     }
 
