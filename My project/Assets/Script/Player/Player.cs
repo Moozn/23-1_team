@@ -78,6 +78,7 @@ public class Player : MonoBehaviour
     private float playtime;
     private bool timecheck;
     private float totalEXP;
+    private bool expui;
     public void Initialize()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -105,6 +106,7 @@ public class Player : MonoBehaviour
         playtime = 0f;
         timecheck = true;
         totalEXP = 0f;
+        expui = true;
     }
     public void Add_Exp(float Exp)
     {
@@ -142,15 +144,15 @@ public class Player : MonoBehaviour
         switch (select)
         {
             case 1:
-                Player_Hp = 80 + (m_playerStat.vgr * 5);
+                Player_Hp = 200 + (m_playerStat.vgr * 7);
                 max_Hp = Player_Hp;
                 break;
             case 2:
-                Player_Atk = 100 + (m_playerStat.str * 11.5f);
+                Player_Atk = 50 + (m_playerStat.str * 11.5f);
                 sword.Set_Damage(Player_Atk);
                 break;
             case 3:
-                Player_Def = 10 + (m_playerStat.ind * 0.3f);
+                Player_Def = 20 + (m_playerStat.ind * 0.5f);
                 break;
             case 4:
                 Player_Mp += 10 + m_playerStat.mnt * 0.5f;
@@ -281,6 +283,7 @@ public class Player : MonoBehaviour
     }
     public void Oninfo()
     {
+        expui = true;
         expUI.Off();
         infoUi.On();
     }
@@ -305,8 +308,10 @@ public class Player : MonoBehaviour
        
         monster.Deactivation();
         text.Exp(Player_CurExp, totalEXP);
+        if(expui) expUI.On();
+        expui = false;
         // infoUi.On();
-        expUI.On();
+
     }
     private void MaxHPMP()
     {

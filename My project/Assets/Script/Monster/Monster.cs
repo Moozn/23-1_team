@@ -165,6 +165,7 @@ public class Monster : MonoBehaviour
         Mob_Hp = 0f;
         state = MonstrState.Death;
         anim.SetBool("Die", true);
+        AudioMgr.Instance.PlayAudio(dieAudio);
         yield return new WaitForSeconds(2f);
         Cursor.visible = true;
         player.End();
