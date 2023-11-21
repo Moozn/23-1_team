@@ -49,7 +49,6 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource rollingAudio; // 구르기
     [SerializeField] private ThirdPersonCamera camera;
     [SerializeField] private Transform maincamera;
-    [SerializeField] private Transform root;
     [SerializeField] private SetUI endUI;
     [SerializeField] private SetUI expUI;
     private Vector3 moveDirection; //이동방향
@@ -180,18 +179,21 @@ public class Player : MonoBehaviour
     private void Rotate()
     {
         float rotationAngle;
+        if (!playerstate.Equals(State.Dash))
+        {
 
-        if (moveDirection.magnitude > 0)
-        {
-            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-            rotationAngle = targetAngle + maincamera.transform.eulerAngles.y;//camera.transform.eulerAngles.y;
+            if (moveDirection.magnitude > 0)
+            {
+                float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+                rotationAngle = targetAngle + maincamera.transform.eulerAngles.y;//camera.transform.eulerAngles.y;
+            }
+            else
+            {
+                rotationAngle = transform.eulerAngles.y;
+            }
+            Quaternion targetRotation = Quaternion.Euler(0, rotationAngle, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30 * Time.deltaTime);
         }
-        else
-        {
-            rotationAngle = transform.eulerAngles.y;
-        }
-        Quaternion targetRotation = Quaternion.Euler(0, rotationAngle, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30 * Time.deltaTime);
     }
     public bool Mp_Consume(float skill_mp)
     {
@@ -239,8 +241,6 @@ public class Player : MonoBehaviour
             else playeranim.Move(moveDirection.z);
             Vector3 velocity = playeranim.forward() * moveSpeed;//playeranim.transform.forward.normalized * moveSpeed;//playeranim.transform.forward * moveSpeed;
             
-
-            Debug.Log(moveDirection);
             if (backrolling)
             {
                 velocity =  -playeranim.transform.forward * 8;
@@ -322,7 +322,7 @@ public class Player : MonoBehaviour
     {
         if (timecheck) playtime += Time.deltaTime;
         hp_slider.Slider_Update(Player_Hp / max_Hp);
-        mp_slider.Slider_Update(Player_Mp / max_mp);
+        //mp_slider.Slider_Update(Player_Mp / max_mp);
         text.statText(Player_Lv, Player_CurExp, m_playerStat);
         MpRecoverytime += Time.deltaTime;
         if (MpRecoverytime >= 1f)//1초마다 마나회복
@@ -366,13 +366,23 @@ public class Player : MonoBehaviour
     }
     public void OnEffect(int Combo)
     {
-    //    swordEffect.On();
-   //  if(Combo != 2)   ps[Combo].Play();
+        swordEffect.On();
+     if(Combo != 2)   ps[Combo].Play();
     }
     public void OffEffect(int Combo)
     {
-     //   ps[Combo].Stop();
-      //  swordEffect.Off();
+        if (Combo != 2) ps[Combo].Stop();
+        swordEffect.Off();
+    }
+    public void Onrolling()
+    {
+        playerstate = State.Dash;
+        moveSpeed = 8f;
+    }
+    public void Offrolling()
+    {
+        playerstate = State.Idle;
+        moveSpeed = 4f;
     }
     private IEnumerator AttackEffect(int Combo)
     {
@@ -412,11 +422,13 @@ public class Player : MonoBehaviour
     }
     public void OnRolling()
     {
+        playerstate = State.Dash;
         backrolling = true;
     }
 
     public void OffRolling()
     {
+        playerstate = State.Idle;
         backrolling = false;
     }
     public void OnDesh(InputAction.CallbackContext context)

@@ -34,39 +34,39 @@ public class SkillMgr : MonoBehaviour
     }
     public void Skill(InputAction.CallbackContext context)
     {
-        int var = context.ReadValue<int>();
-        OnSkill(var);
+      // int var = context.ReadValue<int>();
+      // OnSkill(var);
     }
     public void OnQSkill(InputAction.CallbackContext context)
     {
-        bool Q = context.ReadValueAsButton();
-        if (Q)
-        {
-            OnSkill(0);
-            AudioMgr.Instance.PlayAudio(QskillAudio);
-        }
+       //bool Q = context.ReadValueAsButton();
+       //if (Q)
+       //{
+       //    OnSkill(0);
+       //    AudioMgr.Instance.PlayAudio(QskillAudio);
+       //}
     }
     public void OnWSkill(InputAction.CallbackContext context)
-    {
-        bool W = context.ReadValueAsButton();
-        if (W)
-        {
-            OnSkill(1);
-            AudioMgr.Instance.PlayAudio(WskillAudio);
-        }
-    }
+    {  //
+       // bool W = context.ReadValueAsButton();
+       // if (W)
+       // {
+       //     OnSkill(1);
+       //     AudioMgr.Instance.PlayAudio(WskillAudio);
+       // }
+    }  //
     public void OnESkill(InputAction.CallbackContext context)
     {
-        bool E = context.ReadValueAsButton();
-        if (E)
-        {
-            OnSkill(2);
-            AudioMgr.Instance.PlayAudio(EskillAudio);
-        }
-
-    }
+      //  bool E = context.ReadValueAsButton();
+      //  if (E)
+      //  {
+      //      OnSkill(2);
+      //      AudioMgr.Instance.PlayAudio(EskillAudio);
+      //  }
+      //
+    } //
     private void OnSkill(int skill)
     {
-        skills[skill].Press_Skill();
+      //  skills[skill].Press_Skill();
     }
 }
