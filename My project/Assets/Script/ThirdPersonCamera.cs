@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThirdPersonCamera : MonoBehaviour
 {
     public Transform target; // The target to follow (the playable character)
+    public LayerMask obstacleLayer; // Layer mask for obstacles that should block the camera
     public float minDistance = 2.0f; // Minimum distance from the target
     public float maxDistance = 10.0f; // Maximum distance from the target
     public float sensitivityX = 5.0f; // X-axis rotation sensitivity
@@ -14,13 +15,13 @@ public class ThirdPersonCamera : MonoBehaviour
     private float currentDistance;
     private float rotationX = 0.0f;
     private float rotationY = 0.0f;
-    private bool camera;
+    private bool camera = true;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor to the center of the screen
         Cursor.visible = false; // Hide the cursor
         currentDistance = (minDistance + maxDistance) / 2;
-        camera = true;
     }
 
     public void setcamera(bool b)
@@ -29,7 +30,7 @@ public class ThirdPersonCamera : MonoBehaviour
     }
 
 
- 
+
     void Update()
     {
         if (camera)
@@ -46,12 +47,23 @@ public class ThirdPersonCamera : MonoBehaviour
             // Apply rotation to the camera
             transform.rotation = Quaternion.Euler(rotationY, rotationX, 0);
             target.rotation = Quaternion.Euler(rotationY, rotationX, 0);
+
             // Calculate desired camera position
             Vector3 desiredPosition = target.position - (transform.rotation * Vector3.forward * currentDistance);
 
-            // Apply the position to the camera
-            transform.position = desiredPosition;
-           
+            // Check for obstacles
+            RaycastHit hit;
+            if (Physics.Raycast(target.position, desiredPosition - target.position, out hit, currentDistance, obstacleLayer))
+            {
+                // If an obstacle is hit, adjust the camera position to the hit point
+                transform.position = hit.point;
+            }
+            else
+            {
+                // If no obstacle is hit, apply the desired position to the camera
+                transform.position = desiredPosition;
+            }
+
             // Look at the target (the playable character)
             transform.LookAt(target);
         }
