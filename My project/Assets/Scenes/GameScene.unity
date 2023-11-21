@@ -49850,6 +49850,11 @@ MonoBehaviour:
   sensitivityY: 5
   minYAngle: 4
   maxYAngle: 80
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  collisionRadius: 0.3
+  collisionOffset: 0.2
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61607,8 +61612,13 @@ MonoBehaviour:
   maxDistance: 10
   sensitivityX: 5
   sensitivityY: 2
-  minYAngle: -15
+  minYAngle: -30
   maxYAngle: 80
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  collisionRadius: 0.3
+  collisionOffset: 0.2
 --- !u!1 &1518700801
 GameObject:
   m_ObjectHideFlags: 0
@@ -84063,7 +84073,7 @@ PrefabInstance:
       objectReference: {fileID: 901859257}
     - target: {fileID: 1691543547444983942, guid: c29e084646caaf948bc8dffbc57f65e0, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Nothing
       objectReference: {fileID: 0}
     - target: {fileID: 1885608320280644681, guid: c29e084646caaf948bc8dffbc57f65e0, type: 3}
       propertyPath: m_RootOrder

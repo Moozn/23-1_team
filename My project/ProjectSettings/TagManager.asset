@@ -9,6 +9,7 @@ TagManager:
   - Attack
   - New tag
   - Ground
+  - Nothing
   layers:
   - Default
   - TransparentFX
