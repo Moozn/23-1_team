@@ -7,12 +7,14 @@ public class Option : MonoBehaviour
     [SerializeField] private SetUI optionUi;
     [SerializeField] private Slider soundeffectslider;
     [SerializeField] private Slider bgmslider;
+    [SerializeField] private Slider sensitivity; //카메라 회전?
     private bool optionsWindow;
     private bool resetButton;
     private void Start()
     {
         resetButton = false;
         bgmslider.value = 1f;
+        sensitivity.value = GameMgr.instance.sensitivity();
         soundeffectslider.value = 1f;
         optionsWindow = false;
         optionUi.Off();
@@ -32,6 +34,7 @@ public class Option : MonoBehaviour
     public void OnExitClick()
     {
         AudioMgr.Instance.VolumeUpdate(soundeffectslider.value, bgmslider.value);
+        GameMgr.instance.Set_sensitivity(sensitivity.value);
         optionsWindow = false;
         optionUi.Off();
 
