@@ -28,6 +28,15 @@ public class GameMgr : MonoBehaviour
     {
         mouse_sensitivity = sensitivity;
     }
+
+    public void OnGameExitClick()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+    }
     public float sensitivity() { return mouse_sensitivity; }
     public void SceneChange(int SceneNum)
     {

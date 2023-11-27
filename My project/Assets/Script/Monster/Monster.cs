@@ -154,7 +154,6 @@ public class Monster : MonoBehaviour
     }
     private void Move()
     {
-        agent.isStopped = false;
         anim.SetFloat("Run", 1);
         agent.SetDestination(player.transform.position);
        // rigid.velocity = (transform.position - player.transform.position).normalized * 100;//* Time.deltaTime * 100;
@@ -255,13 +254,18 @@ public class Monster : MonoBehaviour
     }
     private IEnumerator Pattern()
     {
-        
+       
         yield return new WaitForSeconds(2f);
         int random;
-        if (distance() >= 10) StartCoroutine(Movement());
+        if (distance() >= 10)
+        {
+            agent.enabled = true;
+            StartCoroutine(Movement());
+        }
         else
         {
-            agent.isStopped = true;
+            agent.enabled = false;
+            anim.SetFloat("Run", 0);
             if (distance() >= 5)
             {
                 random = Random.Range(2, 5);

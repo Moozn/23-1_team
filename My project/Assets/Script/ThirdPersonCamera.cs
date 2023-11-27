@@ -31,16 +31,9 @@ public class ThirdPersonCamera : MonoBehaviour
         sensitivityY = GameMgr.instance.sensitivity() * 4;
     }
 
-    public void setcamera(bool b)
-    {
-        camera = b;
-    }
-
-
-
     void Update()
     {
-        if (camera)
+        if (!Cursor.visible)
         {
             // Calculate camera rotation based on mouse input
             rotationX += Input.GetAxis("Mouse X") * sensitivityX * Time.deltaTime * 100;

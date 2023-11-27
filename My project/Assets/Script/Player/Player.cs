@@ -28,6 +28,8 @@ public struct PlayerStat
     public float ind; //인내
     public float mnt; // 정신력
     public float NextExp; //필요 경험치
+    public int playerLv;
+    public float curEXP;
 }
 public class Player : MonoBehaviour
 { //소리 이펙트 넣기
@@ -85,16 +87,31 @@ public class Player : MonoBehaviour
         Cursor.visible = false;
         moveSpeed = 4f;
         Player_Lv = 1;
-        m_playerStat.vgr = 5;
-        m_playerStat.str = 5;
-        m_playerStat.ind = 5;
-        m_playerStat.mnt = 5;
-        m_playerStat.NextExp = 100f;
+        if (SaveLoadMgr.instance.LoadFileEmpty())
+        {
+            PlayerStat stat = SaveLoadMgr.instance.Load();
+            m_playerStat.vgr = stat.vgr;
+            m_playerStat.str = stat.str;
+            m_playerStat.ind = stat.ind;
+            m_playerStat.mnt = stat.mnt;
+            m_playerStat.NextExp = stat.NextExp;
+            m_playerStat.playerLv = stat.playerLv;
+            m_playerStat.curEXP = stat.curEXP;
+        }
+        else
+        {
+            m_playerStat.vgr = 5;
+            m_playerStat.str = 5;
+            m_playerStat.ind = 5;
+            m_playerStat.mnt = 5;
+            m_playerStat.NextExp = 100f;
+            m_playerStat.playerLv = 1;
+        }
         // Player_Str = 5;
         // Player_Ind = 5;
         // Player_Mnt = 5;
         // Player_Vgr = 5;
-        Player_CurExp = 0;
+        m_playerStat.curEXP = 0;
         //Player_NextExp = 100f;
         Player_Mp = 50;
         max_mp = Player_Mp;
@@ -108,17 +125,21 @@ public class Player : MonoBehaviour
         totalEXP = 0f;
         expui = true;
     }
+    public PlayerStat GetStat()
+    {
+        return m_playerStat;
+    }
     public void Add_Exp(float Exp)
     {
-        Player_CurExp += Exp; //플레이어가 죽을때 몬스터에서 exp들고옴
+        m_playerStat.curEXP += Exp; //플레이어가 죽을때 몬스터에서 exp들고옴
         totalEXP += Exp;
     }
     public void Add_Stat(int select)
     {
-        if (Player_CurExp - m_playerStat.NextExp >= 0) //현재 경험치가 필요보다 클경우만 스텟을 올림
+        if (m_playerStat.curEXP - m_playerStat.NextExp >= 0) //현재 경험치가 필요보다 클경우만 스텟을 올림
         {
-            Player_Lv++;
-            Player_CurExp -= m_playerStat.NextExp;
+            m_playerStat.playerLv++;
+            m_playerStat.curEXP -= m_playerStat.NextExp;
             switch (select) //경험치로 사게 만들기
             {
                 case 1:
@@ -251,7 +272,7 @@ public class Player : MonoBehaviour
             }
             else if ((playeranim.Equals(State.Attack)))
             {
-                rigid.velocity = velocity;
+                rigid.velocity = velocity * 0.5f;
             }
             else if (x != 0 || z != 0)
             {
@@ -269,6 +290,7 @@ public class Player : MonoBehaviour
     }
     public void OffEXP()
     {
+        expui = true;
         expUI.Off();
     }
     public void restart()
@@ -279,12 +301,9 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         timecheck = true;
-        camera.setcamera(true);
     }
     public void Oninfo()
     {
-        expui = true;
-        expUI.Off();
         infoUi.On();
     }
 
@@ -299,7 +318,6 @@ public class Player : MonoBehaviour
         playeranim.Die(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        camera.setcamera(false);
         
         yield return new WaitForSeconds(1.5f);
         timecheck = false;
@@ -307,7 +325,7 @@ public class Player : MonoBehaviour
         MaxHPMP();
        
         monster.Deactivation();
-        text.Exp(Player_CurExp, totalEXP);
+        text.Exp(m_playerStat.curEXP, totalEXP);
         if(expui) expUI.On();
         expui = false;
         // infoUi.On();
@@ -328,10 +346,12 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
+        if (Cursor.visible) Cursor.lockState = CursorLockMode.None;
+        else Cursor.lockState = CursorLockMode.Locked;
         if (timecheck) playtime += Time.deltaTime;
         hp_slider.Slider_Update(Player_Hp / max_Hp);
         //mp_slider.Slider_Update(Player_Mp / max_mp);
-        text.statText(Player_Lv, Player_CurExp, m_playerStat);
+        text.statText(m_playerStat.playerLv, m_playerStat.curEXP, m_playerStat);
         MpRecoverytime += Time.deltaTime;
         if (MpRecoverytime >= 1f)//1초마다 마나회복
         {
@@ -346,10 +366,10 @@ public class Player : MonoBehaviour
     public void End()
     {
         endUI.On();
-        camera.setcamera(false);
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         timecheck = false;
-        text.EndText(Player_Lv, playtime);
+        text.EndText(m_playerStat.playerLv, playtime);
     }
     IEnumerator SwordColliderMaintain() // 콜라이더 유지시간
     {

@@ -37,7 +37,6 @@ public class Option : MonoBehaviour
         GameMgr.instance.Set_sensitivity(sensitivity.value);
         optionsWindow = false;
         optionUi.Off();
-
     }
     private void Update()
     {

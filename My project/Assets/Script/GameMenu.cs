@@ -26,11 +26,6 @@ public class GameMenu : MonoBehaviour
     }
     public void OnGameExitClick()
     {
-        // Application.Quit();
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
+        GameMgr.instance.OnGameExitClick();
     }
 }

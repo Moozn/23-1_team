@@ -34,7 +34,7 @@ public class TextUi : MonoBehaviour
 
     public void  Exp(float curexp, float totalexp)//float nextexp,float damage, float Df, float vgr, float mnt)
     {
-        cur_Exp.text = "총 경험치 : " + curexp.ToString("N0");
-        total_Exp.text = "소지 경험치 : " + totalexp.ToString("N0");
+        total_Exp.text = "이번 라운드 경험치 : " + totalexp.ToString("N0");
+        cur_Exp.text = "소지 경험치 : " + curexp.ToString("N0");
     }
 }
