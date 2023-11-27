@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameMgr : MonoBehaviour
 {
     public static GameMgr instance = null;
-
+    private float mouse_sensitivity; // 마우스 민감도
     public static GameMgr Instance
     {
         get
@@ -21,7 +21,14 @@ public class GameMgr : MonoBehaviour
         }
     }
     private void Awake() { if (this != Instance) Destroy(gameObject); }
-    void Initialize() { }// EnemyTest(); } // 테스트 후 삭제 예정!!
+    void Initialize() {
+        mouse_sensitivity = 0.5f;
+    }// EnemyTest(); } // 테스트 후 삭제 예정!!
+    public void Set_sensitivity(float sensitivity)
+    {
+        mouse_sensitivity = sensitivity;
+    }
+    public float sensitivity() { return mouse_sensitivity; }
     public void SceneChange(int SceneNum)
     {
         switch (SceneNum)
