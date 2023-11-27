@@ -298,6 +298,7 @@ public class Player : MonoBehaviour
         transform.position = respawn.transform.position;
         playerstate = State.Idle;
         playeranim.Die(false);
+        totalEXP = 0;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         timecheck = true;
